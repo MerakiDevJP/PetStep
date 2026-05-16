@@ -1,0 +1,20 @@
+<div class="card-container" (click)="onFlip()">
+  <div class="card-inner" [class.flipped]="isFlipped">
+    
+    <div class="card-front">
+      <span class="status-badge" [style.background-color]="statusColor">
+        {{ pet.estado }}
+      </span>
+      <img [src]="pet.fotoUrl" [alt]="pet.nombre" class="pet-img">
+      <h2>{{ pet.nombre }}</h2>
+      <p>{{ pet.especie }}</p>
+    </div>
+
+    <div class="card-back">
+      <h3>Conoce a {{ pet.nombre }}</h3>
+      <p>Nuestra mascota se encuentra en estado {{ pet.estado }}. Ayúdanos a encontrarle un hogar permanente.</p>
+      <button class="btn-action">Más información</button>
+    </div>
+
+  </div>
+</div>

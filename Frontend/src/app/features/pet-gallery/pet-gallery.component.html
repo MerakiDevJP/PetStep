@@ -1,0 +1,42 @@
+<section class="gallery-container">
+  <div class="gallery-header">
+    <h2 class="gallery-title">Explora nuestra comunidad</h2>
+    <p class="gallery-subtitle">Mascotas organizadas por su estado actual en el proceso.</p>
+  </div>
+
+  <div class="category-section">
+    <h3 class="section-label adoption">🏠 En Adopción</h3>
+    <div class="gallery-grid">
+      @for (item of enAdopcion(); track item.id) {
+        <app-pet-card [pet]="item"></app-pet-card>
+      } @empty { <p class="empty-text">No hay mascotas disponibles en este momento.</p> }
+    </div>
+  </div>
+
+  <div class="category-section">
+    <h3 class="section-label adopted">🎉 Final feliz (Adoptados)</h3>
+    <div class="gallery-grid">
+      @for (item of adoptados(); track item.id) {
+        <app-pet-card [pet]="item"></app-pet-card>
+      } @empty { <p class="empty-text">Pronto tendremos más historias de éxito.</p> }
+    </div>
+  </div>
+
+  <div class="category-section">
+    <h3 class="section-label lost">🆘 Perdidos (Ayúdanos a encontrarlos)</h3>
+    <div class="gallery-grid">
+      @for (item of perdidos(); track item.id) {
+        <app-pet-card [pet]="item"></app-pet-card>
+      } @empty { <p class="empty-text">¡Buenas noticias! No hay reportes activos.</p> }
+    </div>
+  </div>
+
+  <div class="category-section">
+    <h3 class="section-label recovered">✨ Recuperados</h3>
+    <div class="gallery-grid">
+      @for (item of recuperados(); track item.id) {
+        <app-pet-card [pet]="item"></app-pet-card>
+      } @empty { <p class="empty-text">Buscando reportes de reconexión.</p> }
+    </div>
+  </div>
+</section>

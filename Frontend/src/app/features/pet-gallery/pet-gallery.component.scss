@@ -1,0 +1,24 @@
+.category-section {
+  margin-bottom: 50px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+}
+
+.section-label {
+  font-size: 1.8rem;
+  margin-left: 40px;
+  padding-left: 15px;
+  border-left: 5px solid #6C63FF;
+  
+  &.adoption { border-color: #27AE60; }
+  &.adopted { border-color: #2980B9; }
+  &.lost { border-color: #C0392B; }
+  &.recovered { border-color: #F1C40F; }
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 40px;
+}
