@@ -1,99 +1,112 @@
-// Paleta de colores corporativa (Clase maestra de diseño)
-$color-primario: #4CAF50;    // Verde Esperanza
-$color-secundario: #4A5568;  // Gris Cálido
+ 
+$color-primario: #FF8200;      // Rojo Esperanza (De los deditos del logo)
+$color-azul-electrico: #004BFF;// Azul Eléctrico (Acento moderno de interacción)
+$color-verde-crecimiento: #4CAF50; // Verde Crecimiento (Soporte e identidad)
+$color-dark-text: #0B2545;     // Gris/Azul Oscuro Corporativo (Para textos legibles)
+$color-secundario: #4A5568;    // Gris Cálido para textos secundarios
+ 
 $color-fondo-card: #FFFFFF;
-$color-background: #F7FAFC;
-$color-accent: #3182CE;      // Azul Suave para interacciones
-
+$color-background: #F7FAFC;    // Fondo limpio para contrastar las cards
+ 
 .strategic-container {
   background-color: $color-background;
   padding: 3rem 1.5rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   max-width: 1200px;
   margin: 0 auto;
-
+ 
   .strategic-header {
     text-align: center;
     margin-bottom: 2.5rem;
-
+ 
     h1 {
-      color: $color-primario;
+      color: $color-azul-electrico; // Cambiado a Azul Eléctrico para un impacto inicial limpio
       font-size: 2.5rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
     }
-
+ 
     .subtitle {
-      color: $color-secundario;
+      color: $color-dark-text; // Usamos el tono oscuro institucional
       font-size: 1.1rem;
+      font-style: italic;
     }
   }
-
+ 
   .divider {
     border: 0;
     height: 2px;
-    background: linear-gradient(to right, transparent, $color-primario, transparent);
+    // Gradiente dinámico usando la transición de colores del logo
+    background: linear-gradient(to right, transparent, $color-primario, $color-azul-electrico, transparent);
     margin-bottom: 3rem;
   }
 }
-
+ 
 .grid-mision-vision {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   margin-bottom: 4rem;
-
+ 
   .card-strategic-info {
     background-color: $color-fondo-card;
     padding: 2.5rem;
     border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    border-top: 4px solid $color-primario;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; // Transición suave original
-
+    box-shadow: 0 4px 6px rgba($color-dark-text, 0.04); // Sombra más orgánica
+    border-top: 4px solid $color-verde-crecimiento; // Misión/Visión respaldadas por el Verde Crecimiento
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+ 
     h2 {
-      color: $color-primario;
+      color: $color-azul-electrico; // Títulos de secciones en azul eléctrico
       margin-bottom: 1rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+     
+      .icon-box-mv {
+        color: $color-primario; // Iconos de los títulos en Rojo Esperanza
+      }
     }
-
+ 
     p {
-      color: $color-secundario;
+      color: $color-dark-text; // Cambiado para máxima legibilidad en pantallas
       line-height: 1.6;
       text-align: justify;
     }
-
+ 
     &:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 12px 20px rgba($color-dark-text, 0.08);
+    }
+   
+    // Opcional: Si quieres alternar el borde superior entre los dos colores del logo
+    &.vision-card {
+      border-top: 4px solid $color-primario;
     }
   }
 }
-
-// CORRECCIÓN: El contenedor asíncrono debe estar al nivel del flujo principal
+ 
+// Contenedor asíncrono para las imágenes de soporte de PetStep
 .preview-overlay {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: -1rem 0 4rem 0;
-  perspective: 1000px; 
-
+  perspective: 1000px;
+ 
   .preview-img {
     width: 100%;
     max-width: 700px;
     height: 340px;
     object-fit: cover;
     border-radius: 12px;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba($color-primario, 0.15);
-    
-    // Animación fluida de despliegue vertical (Giro elegante sobre el eje X)
+    box-shadow: 0 15px 30px rgba($color-dark-text, 0.12);
+    border: 1px solid rgba($color-azul-electrico, 0.15); // Borde sutil en azul eléctrico
+   
     animation: flipInX 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
   }
 }
-
+ 
 @keyframes flipInX {
   0% {
     transform: rotateX(-60deg);
@@ -104,19 +117,20 @@ $color-accent: #3182CE;      // Azul Suave para interacciones
     opacity: 1;
   }
 }
-
+ 
 .valores-section {
   h2 {
     text-align: center;
-    color: $color-secundario;
+    color: $color-dark-text;
     margin-bottom: 2rem;
+    font-weight: 700;
   }
-
+ 
   .grid-valores {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
-
+ 
     .valor-card {
       background-color: $color-fondo-card;
       padding: 1.5rem;
@@ -125,29 +139,31 @@ $color-accent: #3182CE;      // Azul Suave para interacciones
       cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
       border: 2px solid transparent;
-
+ 
       &:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 15px rgba($color-dark-text, 0.06);
       }
-
+ 
+      // Al hacer click/seleccionar un valor (Responsabilidad, Trazabilidad, etc.)
       &.active {
-        border-color: $color-accent;
-        background-color: #EBF8FF; // Tono azul sutil
+        border-color: $color-azul-electrico; // Borde Azul Eléctrico al activarse
+        background-color: #EBF3FF; // Tono azul pastel de fondo sumamente suave
       }
-
+ 
       .icon-box {
         font-size: 2rem;
-        color: $color-primario;
+        color: $color-verde-crecimiento; // Iconos de valores en Verde Crecimiento
         margin-bottom: 1rem;
       }
-
+ 
       h3 {
-        color: #2D3748;
+        color: $color-dark-text;
         font-size: 1.2rem;
         margin-bottom: 0.5rem;
+        font-weight: 600;
       }
-
+ 
       p {
         color: $color-secundario;
         font-size: 0.95rem;
@@ -156,3 +172,4 @@ $color-accent: #3182CE;      // Azul Suave para interacciones
     }
   }
 }
+ 
