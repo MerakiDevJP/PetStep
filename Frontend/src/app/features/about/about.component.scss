@@ -3,18 +3,18 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   max-width: 1200px;
   margin: 0 auto;
-
+ 
   .strategic-header {
     text-align: center;
     margin-bottom: 2.5rem;
-
+ 
     h1 {
       color: var(--secondary-azul); // Azul Eléctrico brillante
       font-size: 2.5rem;
       font-weight: 800;
       margin-bottom: 0.5rem;
     }
-
+ 
     .subtitle {
       color: var(--dark-text); // Azul Oscuro PETSTEP
       font-size: 1.1rem;
@@ -22,7 +22,7 @@
       opacity: 0.85;
     }
   }
-
+ 
   .divider {
     border: 0;
     height: 3px;
@@ -31,13 +31,13 @@
     margin-bottom: 3rem;
   }
 }
-
+ 
 .grid-mision-vision {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   margin-bottom: 4rem;
-
+ 
   .card-strategic-info {
     background-color: #FFFFFF; // Fondo blanco limpio para resaltar sobre el fondo crema global
     padding: 2.5rem;
@@ -58,14 +58,14 @@
         color: var(--primary-rojo); // Iconos de los títulos en Rojo Esperanza
       }
     }
-
+ 
     p {
       color: var(--dark-text); // Máxima legibilidad
       line-height: 1.6;
       text-align: justify;
       margin: 0;
     }
-
+ 
     &:hover {
       transform: translateY(-5px);
       box-shadow: 0 12px 24px rgba(11, 37, 69, 0.1);
@@ -84,8 +84,8 @@
   justify-content: center;
   align-items: center;
   margin: -1rem 0 4rem 0;
-  perspective: 1000px; 
-
+  perspective: 1000px;
+ 
   .preview-img {
     width: 100%;
     max-width: 700px;
@@ -98,7 +98,7 @@
     animation: flipInX 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
   }
 }
-
+ 
 @keyframes flipInX {
   0% {
     transform: rotateX(-60deg);
@@ -109,7 +109,7 @@
     opacity: 1;
   }
 }
-
+ 
 .valores-section {
   h2 {
     text-align: center;
@@ -118,12 +118,12 @@
     font-weight: 700;
     font-size: 1.8rem;
   }
-
+ 
   .grid-valores {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
-
+ 
     .valor-card {
       background-color: #FFFFFF; // Cards blancas para contraste óptimo
       padding: 1.8rem 1.5rem;
@@ -145,21 +145,21 @@
         background-color: #F0F5FF; // Tono azul pastel limpio de selección
         box-shadow: 0 6px 15px rgba(0, 75, 255, 0.08);
       }
-
+ 
       .icon-box {
         font-size: 2.2rem;
         color: var(--support-verde); // Iconos de valores en Verde Crecimiento
         margin-bottom: 0.8rem;
         display: block;
       }
-
+ 
       h3 {
         color: var(--dark-text);
         font-size: 1.2rem;
         margin-bottom: 0.6rem;
         font-weight: 700;
       }
-
+ 
       p {
         color: var(--dark-text);
         opacity: 0.8; /* Reemplaza el gris rígido por opacidad del texto principal */
@@ -170,3 +170,4 @@
     }
   }
 }
+ 
