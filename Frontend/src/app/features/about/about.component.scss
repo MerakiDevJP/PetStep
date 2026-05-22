@@ -1,12 +1,4 @@
-// Paleta de colores corporativa (Clase maestra de diseño)
-$color-primario: #4CAF50;    // Verde Esperanza
-$color-secundario: #4A5568;  // Gris Cálido
-$color-fondo-card: #FFFFFF;
-$color-background: #F7FAFC;
-$color-accent: #3182CE;      // Azul Suave para interacciones
-
 .strategic-container {
-  background-color: $color-background;
   padding: 3rem 1.5rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   max-width: 1200px;
@@ -17,22 +9,25 @@ $color-accent: #3182CE;      // Azul Suave para interacciones
     margin-bottom: 2.5rem;
 
     h1 {
-      color: $color-primario;
+      color: var(--secondary-azul); // Azul Eléctrico brillante
       font-size: 2.5rem;
-      font-weight: 700;
+      font-weight: 800;
       margin-bottom: 0.5rem;
     }
 
     .subtitle {
-      color: $color-secundario;
+      color: var(--dark-text); // Azul Oscuro PETSTEP
       font-size: 1.1rem;
+      font-style: italic;
+      opacity: 0.85;
     }
   }
 
   .divider {
     border: 0;
-    height: 2px;
-    background: linear-gradient(to right, transparent, $color-primario, transparent);
+    height: 3px;
+    // Gradiente dinámico utilizando los dos colores principales del logo
+    background: linear-gradient(to right, transparent, var(--primary-rojo), var(--secondary-azul), transparent);
     margin-bottom: 3rem;
   }
 }
@@ -44,35 +39,46 @@ $color-accent: #3182CE;      // Azul Suave para interacciones
   margin-bottom: 4rem;
 
   .card-strategic-info {
-    background-color: $color-fondo-card;
+    background-color: #FFFFFF; // Fondo blanco limpio para resaltar sobre el fondo crema global
     padding: 2.5rem;
     border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    border-top: 4px solid $color-primario;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; // Transición suave original
+    box-shadow: 0 4px 20px rgba(11, 37, 69, 0.05); // Sombra usando el Azul Oscuro institucional
+    border-top: 4px solid var(--support-verde); // Misión respaldada por el Verde Crecimiento
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     h2 {
-      color: $color-primario;
+      color: var(--secondary-azul); // Títulos de secciones en azul eléctrico
       margin-bottom: 1rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      font-weight: 700;
+      
+      .icon-box-mv {
+        color: var(--primary-rojo); // Iconos de los títulos en Rojo Esperanza
+      }
     }
 
     p {
-      color: $color-secundario;
+      color: var(--dark-text); // Máxima legibilidad
       line-height: 1.6;
       text-align: justify;
+      margin: 0;
     }
 
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(11, 37, 69, 0.1);
+    }
+    
+    // Tarjeta de Visión alternada con el Rojo Esperanza del logo
+    &.vision-card {
+      border-top: 4px solid var(--primary-rojo); 
     }
   }
 }
 
-// CORRECCIÓN: El contenedor asíncrono debe estar al nivel del flujo principal
+// Contenedor animado para las imágenes de soporte
 .preview-overlay {
   display: flex;
   justify-content: center;
@@ -86,10 +92,9 @@ $color-accent: #3182CE;      // Azul Suave para interacciones
     height: 340px;
     object-fit: cover;
     border-radius: 12px;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba($color-primario, 0.15);
+    box-shadow: 0 15px 30px rgba(11, 37, 69, 0.12);
+    border: 2px solid rgba(0, 75, 255, 0.1); // Borde sutil en azul eléctrico
     
-    // Animación fluida de despliegue vertical (Giro elegante sobre el eje X)
     animation: flipInX 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
   }
 }
@@ -108,50 +113,59 @@ $color-accent: #3182CE;      // Azul Suave para interacciones
 .valores-section {
   h2 {
     text-align: center;
-    color: $color-secundario;
-    margin-bottom: 2rem;
+    color: var(--dark-text);
+    margin-bottom: 2.5rem;
+    font-weight: 700;
+    font-size: 1.8rem;
   }
 
   .grid-valores {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
 
     .valor-card {
-      background-color: $color-fondo-card;
-      padding: 1.5rem;
-      border-radius: 8px;
+      background-color: #FFFFFF; // Cards blancas para contraste óptimo
+      padding: 1.8rem 1.5rem;
+      border-radius: 10px;
       text-align: center;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      transition: all 0.25s ease;
       border: 2px solid transparent;
+      box-shadow: 0 4px 12px rgba(11, 37, 69, 0.03);
 
       &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(11, 37, 69, 0.06);
       }
 
+      // Al interactuar/seleccionar un valor de la plataforma
       &.active {
-        border-color: $color-accent;
-        background-color: #EBF8FF; // Tono azul sutil
+        border-color: var(--secondary-azul); // Borde en Azul Eléctrico
+        background-color: #F0F5FF; // Tono azul pastel limpio de selección
+        box-shadow: 0 6px 15px rgba(0, 75, 255, 0.08);
       }
 
       .icon-box {
-        font-size: 2rem;
-        color: $color-primario;
-        margin-bottom: 1rem;
+        font-size: 2.2rem;
+        color: var(--support-verde); // Iconos de valores en Verde Crecimiento
+        margin-bottom: 0.8rem;
+        display: block;
       }
 
       h3 {
-        color: #2D3748;
+        color: var(--dark-text);
         font-size: 1.2rem;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.6rem;
+        font-weight: 700;
       }
 
       p {
-        color: $color-secundario;
+        color: var(--dark-text);
+        opacity: 0.8; /* Reemplaza el gris rígido por opacidad del texto principal */
         font-size: 0.95rem;
-        line-height: 1.4;
+        line-height: 1.5;
+        margin: 0;
       }
     }
   }

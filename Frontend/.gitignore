@@ -47,3 +47,6 @@ Thumbs.db
 #.devcontainer/
 .env
 *.log
+
+# Excluir metadatos ocultos y flujos alternativos de Windows
+*:Zone.Identifier

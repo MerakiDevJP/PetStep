@@ -1,0 +1,17 @@
+/* src/app/app.component.scss */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Controla que el footer se mantenga abajo */
+  width: 100%;
+  
+  // Si de casualidad hay un div superior, aseguramos la herencia cromática
+  background-color: var(--bg-crema); 
+  color: var(--dark-text);
+}
+
+.main-content-layout {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
