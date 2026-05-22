@@ -44,6 +44,6 @@ __screenshots__/
 Thumbs.db
 
 # DevContainer & Local Env
-.devcontainer/
+#.devcontainer/
 .env
 *.log

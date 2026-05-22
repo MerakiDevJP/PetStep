@@ -1,0 +1,53 @@
+<section class="strategic-container">
+  <header class="strategic-header">
+    <h1>Planificación Estratégica Pet-Step</h1>
+    <p class="subtitle">Ecosistema tecnológico para la trazabilidad y protección animal</p>
+  </header>
+
+  <hr class="divider">
+
+  <!-- Sección Misión y Visión -->
+  <div class="grid-mision-vision">
+    <article 
+      class="card-strategic-info"
+      (mouseenter)="onMostrarImagen('mision')"
+      (mouseleave)="onOcultarImagen()">
+      <h2><i class="bi bi-bullseye"></i> Misión</h2>
+      <p>{{ mision() }}</p>
+    </article>
+
+    <article 
+      class="card-strategic-info"
+      (mouseenter)="onMostrarImagen('vision')"
+      (mouseleave)="onOcultarImagen()">
+      <h2><i class="bi bi-eye"></i> Visión</h2>
+      <p>{{ vision() }}</p>
+    </article>
+  </div>
+
+  <!-- Contenedor dinámico de previsualización asíncrona -->
+  @if (imagenActualUrl()) {
+    <div class="preview-overlay">
+      <img [src]="imagenActualUrl()" alt="Visualización estratégica" class="preview-img">
+    </div>
+  }
+
+  <!-- Sección Valores Estratégicos -->
+  <footer class="valores-section">
+    <h2>Valores Pilares del Desarrollo</h2>
+    <div class="grid-valores">
+      @for (valor of valores(); track valor.id) {
+        <div 
+          class="valor-card" 
+          [class.active]="valorSeleccionadoId() === valor.id"
+          (click)="onSeleccionarValor(valor.id)">
+          <div class="icon-box">
+            <i [class]="'bi ' + valor.icono"></i>
+          </div>
+          <h3>{{ valor.titulo }}</h3>
+          <p>{{ valor.descripcion }}</p>
+        </div>
+      }
+    </div>
+  </footer>
+</section>

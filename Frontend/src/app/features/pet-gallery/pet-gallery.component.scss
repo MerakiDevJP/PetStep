@@ -1,24 +1,41 @@
-.category-section {
-  margin-bottom: 50px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 20px;
-}
+$color-primario: #4CAF50;
+$color-secundario: #4A5568;
+$color-borde: #CBD5E0;
 
-.section-label {
-  font-size: 1.8rem;
-  margin-left: 40px;
-  padding-left: 15px;
-  border-left: 5px solid #6C63FF;
-  
-  &.adoption { border-color: #27AE60; }
-  &.adopted { border-color: #2980B9; }
-  &.lost { border-color: #C0392B; }
-  &.recovered { border-color: #F1C40F; }
-}
+.search-section {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0 2.5rem 0;
+  padding: 0 1rem;
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-  padding: 20px 40px;
+  .search-box {
+    position: relative;
+    width: 100%;
+    max-width: 550px;
+
+    .search-icon {
+      position: absolute;
+      left: 1.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.1rem;
+      color: $color-secundario;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.8rem 1rem 0.8rem 2.8rem;
+      font-size: 1rem;
+      border: 2px solid $color-borde;
+      border-radius: 25px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      color: #2D3748;
+
+      &:focus {
+        border-color: $color-primario;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+      }
+    }
+  }
 }
