@@ -1,1 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
+/* src/styles.scss */
+:root {
+  /* Colores Principales del Isotipo */
+  --primary-rojo: #FF8200;       /* Rojo Esperanza */
+  --secondary-azul: #004BFF;     /* Azul Eléctrico */
+  --support-verde: #4CAF50;      /* Verde Crecimiento */
+  --accent-amarillo: #FFD000;    /* Amarillo Sol */
+  
+  /* Tonos de Apoyo */
+  --texture-salmon: #FF556F;     
+  --dark-text: #0B2545;          /* Azul Oscuro PETSTEP */
+  
+  /* Fondos Suaves */
+  --bg-crema: #F9F1E7;           /* Crema Suave */
+  --arena-isotype: #D1B89A;      /* Crema Oscuro */
+}
+
+/* Configuramos el viewport completo del navegador */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-crema); /* Obliga a la página a nacer con el crema claro */
+  color: var(--dark-text);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

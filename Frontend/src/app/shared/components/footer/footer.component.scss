@@ -1,0 +1,180 @@
+/* src/app/shared/components/footer/footer.component.scss */
+
+:host {
+  display: block;
+  background-color: var(--arena-isotype); /* Fondo Crema Oscuro de la patita */
+  color: var(--dark-text);                /* Texto base institucional */
+  border-top: 3.5s solid var(--support-verde); /* Línea de Verde Crecimiento */
+  padding: 1.5rem 1rem 1rem 1rem;         /* Padding optimizado para el tamaño de elementos */
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Envoltura maestra horizontal */
+.footer-layout-wrapper {
+  display: flex;
+  align-items: flex-end; /* Alinea las patitas de las mascotas al ras del suelo del footer */
+  justify-content: space-between;
+  max-width: 1300px;
+  margin: 0 auto;
+  gap: 1.5rem;
+}
+
+/* Área central de información */
+.footer-main-content {
+  flex: 1;
+  max-width: 950px;
+  margin-bottom: 0.5rem; /* Separación sutil del borde inferior de las mascotas */
+}
+
+/* Distribución de las 3 columnas de contenido */
+.footer-container {
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr 0.9fr; /* Le da un poco más de espacio a la columna de la tipografía */
+  gap: 2rem;
+  align-items: center; /* Alinea verticalmente los textos con la imagen de la tipografía */
+}
+
+/* ==========================================================================
+   ESTILOS DE LA COLUMNA DE TIPOGRAFÍA (IMAGEN CORPORATIVA)
+   ========================================================================== */
+.brand-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .logo-footer {
+    max-width: 260px; /* Tamaño ideal y legible para el bloque de texto del logo */
+    height: auto;
+    object-fit: contain;
+    /* Un filtro sutil para que el azul oscuro de las letras resalte sobre el crema */
+    filter: drop-shadow(0px 2px 4px rgba(11, 37, 69, 0.05)); 
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.02); /* Efecto interactivo muy discreto */
+    }
+  }
+}
+
+/* ==========================================================================
+   ESTILOS DE LAS COLUMNAS DE TEXTO (EXPLORA Y PLATAFORMA)
+   ========================================================================== */
+.footer-column {
+  h4 {
+    color: var(--dark-text);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    
+    // Una pequeña línea decorativa debajo del título "Explora" y "Plataforma"
+    &::after {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 2px;
+      background-color: var(--secondary-azul); /* Azul Eléctrico */
+      margin-top: 4px;
+      border-radius: 1px;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
+
+      a {
+        text-decoration: none;
+        color: var(--dark-text);
+        font-weight: 600;
+        opacity: 0.85;
+        display: inline-block;
+        transition: all 0.2s ease;
+
+        &:hover {
+          opacity: 1;
+          color: var(--secondary-azul); /* Cambio a azul eléctrico */
+          transform: translateX(3px);   /* Desplazamiento elegante hacia la derecha */
+        }
+      }
+
+      .footer-text-info {
+        font-weight: 600;
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+   ESTILOS DE LOS GUARDIANES DEL FOOTER (MASCOTAS)
+   ========================================================================== */
+.footer-pet-mascot {
+  display: flex;
+  align-items: flex-end;
+  
+  .pet-avatar {
+    height: 120px; /* Ajustado para hacer balance simétrico con la tipografía central */
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0px 4px 8px rgba(11, 37, 69, 0.1));
+  }
+}
+
+/* Barra de créditos inferior */
+.footer-bottom {
+  max-width: 1300px;
+  margin: 1.5rem auto 0 auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(11, 37, 69, 0.1); /* Línea divisoria suave */
+  text-align: center;
+
+  .credits-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark-text);
+    opacity: 0.7;
+    margin: 0;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVO (Celulares y Tablets pequeñas)
+   ========================================================================== */
+@media (max-width: 768px) {
+  :host {
+    padding: 2rem 1rem 1rem 1rem;
+  }
+
+  /* Ocultamos las mascotas a los lados para dar espacio al texto */
+  .footer-pet-mascot {
+    display: none;
+  }
+
+  /* Cambiamos las columnas a una sola fila vertical centrada */
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .brand-info {
+    justify-content: center;
+    
+    .logo-footer {
+      max-width: 220px; /* Un poco más pequeño en móviles */
+    }
+  }
+
+  .footer-column h4::after {
+    margin: 4px auto 0 auto; /* Centra la línea decorativa en móvil */
+  }
+}
