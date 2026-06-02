@@ -1,0 +1,63 @@
+<div class="form-container">
+
+<h1>
+Solicitud de adopción
+</h1>
+
+<form
+[formGroup]="adoptionForm"
+(ngSubmit)="submitForm()"
+>
+
+<input
+type="text"
+placeholder="Nombre completo"
+formControlName="fullName"
+/>
+
+<input
+type="email"
+placeholder="Correo"
+formControlName="email"
+/>
+
+<input
+type="number"
+placeholder="Edad"
+formControlName="age"
+/>
+
+@if(
+adoptionForm.get('age')?.errors?.['adult']
+&&
+adoptionForm.get('age')?.touched
+){
+
+<p>
+Debes ser mayor de edad
+</p>
+
+}
+
+<input
+placeholder="Teléfono"
+formControlName="phone"
+/>
+
+<textarea
+placeholder="¿Por qué deseas adoptar?"
+formControlName="reason"
+></textarea>
+
+<button
+type="submit"
+[disabled]="adoptionForm.invalid"
+>
+
+Enviar solicitud
+
+</button>
+
+</form>
+
+</div>
