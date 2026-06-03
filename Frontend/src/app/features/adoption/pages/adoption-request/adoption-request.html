@@ -1,249 +1,151 @@
 <section class="form-section">
-  <!-- Decorative blobs -->
   <div class="blob blob--1" aria-hidden="true"></div>
   <div class="blob blob--2" aria-hidden="true"></div>
 
-  <div class="form-card">
+  <div class="forms-layout">
 
-  <!-- Header -->
-<div class="form-card__header">
-  <div class="header-text">
-    <h1 class="form-card__title">
-      {{ isAdoption ? '¿Quieres adoptar?' : 'Reportar mascota perdida' }}
-    </h1>
-    <p class="form-card__subtitle">
-      {{ isAdoption
-        ? 'Completa tu solicitud y conectamos contigo pronto.'
-        : 'Cuéntanos sobre tu mascota para ayudarte a encontrarla.' }}
-    </p>
-  </div>
-</div>
+    <!-- ── IZQUIERDA: Formulario de Adopción ── -->
+    <div class="form-card">
 
-    <!-- Mode toggle -->
-    <div class="mode-toggle" [formGroup]="adoptionForm">
-      <label class="mode-toggle__label">Tipo de solicitud</label>
-      <div class="mode-toggle__options">
-        <button
-          type="button"
-          class="mode-btn"
-          [class.mode-btn--active]="isAdoption"
-          (click)="adoptionForm.get('formMode')?.setValue('adoption')">
-          <span class="mode-btn__icon">🐾</span>
-          Adopción
-        </button>
-        <button
-          type="button"
-          class="mode-btn"
-          [class.mode-btn--active]="!isAdoption"
-          (click)="adoptionForm.get('formMode')?.setValue('lost')">
-          <span class="mode-btn__icon">🔍</span>
-          Extraviado
-        </button>
+      <div class="form-card__header">
+        <div class="header-text">
+          <h1 class="form-card__title">
+            {{ isAdoption ? '¿Quieres adoptar?' : 'Reportar mascota perdida' }}
+          </h1>
+          <p class="form-card__subtitle">
+            {{ isAdoption
+              ? 'Completa tu solicitud y conectamos contigo pronto.'
+              : 'Cuéntanos sobre tu mascota para ayudarte a encontrarla.' }}
+          </p>
+        </div>
       </div>
+
+      <div class="mode-toggle" [formGroup]="adoptionForm">
+        <label class="mode-toggle__label">Tipo de solicitud</label>
+        <div class="mode-toggle__options">
+          <button type="button" class="mode-btn"
+            [class.mode-btn--active]="isAdoption"
+            (click)="adoptionForm.get('formMode')?.setValue('adoption')">
+            <span class="mode-btn__icon">🐾</span> Adopción
+          </button>
+          <button type="button" class="mode-btn"
+            [class.mode-btn--active]="!isAdoption"
+            (click)="adoptionForm.get('formMode')?.setValue('lost')">
+            <span class="mode-btn__icon">🔍</span> Extraviado
+          </button>
+        </div>
+      </div>
+
+      <div class="success-banner" *ngIf="submitSuccess" role="alert">
+        <span class="success-banner__icon">✓</span>
+        <span>¡Solicitud enviada exitosamente!</span>
+      </div>
+
+      <form [formGroup]="adoptionForm" (ngSubmit)="submitForm()" novalidate class="form-body">
+
+        <div class="form-row form-row--2col">
+          <div class="field-group" [class.field-group--error]="isInvalid('fullName')" [class.field-group--ok]="isValid('fullName')">
+            <label class="field-label" for="fullName">Nombre completo <span class="required-dot">*</span></label>
+            <div class="field-input-wrap">
+              <input id="fullName" type="text" class="field-input" formControlName="fullName" placeholder="Ej. María García López" autocomplete="name" />
+              <span class="field-icon field-icon--ok">✓</span><span class="field-icon field-icon--err">✕</span>
+            </div>
+            <p class="field-error" *ngIf="isInvalid('fullName')" role="alert"><span class="error-dot">●</span> {{ getError('fullName') }}</p>
+          </div>
+          <div class="field-group" [class.field-group--error]="isInvalid('email')" [class.field-group--ok]="isValid('email')">
+            <label class="field-label" for="email">Correo electrónico <span class="required-dot">*</span></label>
+            <div class="field-input-wrap">
+              <input id="email" type="email" class="field-input" formControlName="email" placeholder="correo@ejemplo.com" autocomplete="email" />
+              <span class="field-icon field-icon--ok">✓</span><span class="field-icon field-icon--err">✕</span>
+            </div>
+            <p class="field-error" *ngIf="isInvalid('email')" role="alert"><span class="error-dot">●</span> {{ getError('email') }}</p>
+          </div>
+        </div>
+
+        <div class="form-row form-row--2col">
+          <div class="field-group" [class.field-group--error]="isInvalid('phone')" [class.field-group--ok]="isValid('phone')">
+            <label class="field-label" for="phone">Teléfono <span class="required-dot">*</span></label>
+            <div class="field-input-wrap">
+              <input id="phone" type="tel" class="field-input" formControlName="phone" placeholder="+593 99 123 4567" autocomplete="tel" />
+              <span class="field-icon field-icon--ok">✓</span><span class="field-icon field-icon--err">✕</span>
+            </div>
+            <p class="field-error" *ngIf="isInvalid('phone')" role="alert"><span class="error-dot">●</span> {{ getError('phone') }}</p>
+          </div>
+          <div class="field-group" [class.field-group--error]="isInvalid('age')" [class.field-group--ok]="isValid('age')">
+            <label class="field-label" for="age">Edad <span class="required-dot">*</span></label>
+            <div class="field-input-wrap">
+              <input id="age" type="number" class="field-input" formControlName="age" placeholder="Mayor de 18 años" min="1" max="120" />
+              <span class="field-icon field-icon--ok">✓</span><span class="field-icon field-icon--err">✕</span>
+            </div>
+            <p class="field-error" *ngIf="isInvalid('age')" role="alert"><span class="error-dot">●</span> {{ getError('age') }}</p>
+            <p class="field-hint" *ngIf="!isInvalid('age')">Debes tener 18 años o más.</p>
+          </div>
+        </div>
+
+        <div class="field-group" [class.field-group--error]="isInvalid('address')" [class.field-group--ok]="isValid('address')">
+          <label class="field-label" for="address">Dirección <span class="required-dot">*</span></label>
+          <div class="field-input-wrap">
+            <input id="address" type="text" class="field-input" formControlName="address" placeholder="Calle, número, ciudad" autocomplete="street-address" />
+            <span class="field-icon field-icon--ok">✓</span><span class="field-icon field-icon--err">✕</span>
+          </div>
+          <p class="field-error" *ngIf="isInvalid('address')" role="alert"><span class="error-dot">●</span> {{ getError('address') }}</p>
+        </div>
+
+        <div class="form-divider">
+          <span>{{ isAdoption ? 'Sobre la mascota que deseas adoptar' : 'Sobre tu mascota perdida' }}</span>
+        </div>
+
+        <div class="field-group" [class.field-group--error]="isInvalid('petName')" [class.field-group--ok]="isValid('petName')">
+          <label class="field-label" for="petName">
+            {{ isAdoption ? 'Nombre de la mascota' : 'Nombre de tu mascota' }} <span class="required-dot">*</span>
+          </label>
+          <div class="field-input-wrap">
+            <input id="petName" type="text" class="field-input" formControlName="petName"
+              [placeholder]="isAdoption ? 'Ej. Firulais' : 'Nombre de tu mascota perdida'" />
+            <span class="field-icon field-icon--ok">✓</span><span class="field-icon field-icon--err">✕</span>
+          </div>
+          <p class="field-error" *ngIf="isInvalid('petName')" role="alert"><span class="error-dot">●</span> {{ getError('petName') }}</p>
+        </div>
+
+        <div class="field-group" [class.field-group--error]="isInvalid('petDescription')" [class.field-group--ok]="isValid('petDescription')">
+          <label class="field-label" for="petDescription">
+            {{ isAdoption ? 'Descripción / por qué quieres adoptar' : 'Descripción de la mascota perdida' }}
+            <span class="required-dot">*</span>
+          </label>
+          <div class="field-input-wrap">
+            <textarea id="petDescription" class="field-input field-input--textarea" formControlName="petDescription" rows="4"
+              [placeholder]="isAdoption
+                ? 'Cuéntanos sobre tu hogar, estilo de vida y por qué deseas adoptar...'
+                : 'Describe su color, raza, tamaño, señas particulares y lugar donde se perdió...'">
+            </textarea>
+            <span class="field-icon field-icon--ok field-icon--textarea">✓</span>
+            <span class="field-icon field-icon--err field-icon--textarea">✕</span>
+          </div>
+          <p class="field-error" *ngIf="isInvalid('petDescription')" role="alert"><span class="error-dot">●</span> {{ getError('petDescription') }}</p>
+          <p class="field-hint" *ngIf="!isInvalid('petDescription')">Mínimo 20 caracteres.</p>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="message">Mensaje adicional <span class="optional-tag">Opcional</span></label>
+          <div class="field-input-wrap">
+            <textarea id="message" class="field-input field-input--textarea" formControlName="message" rows="3" placeholder="¿Algo más que quieras contarnos?"></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <p class="form-warning" *ngIf="submitted && adoptionForm.invalid" role="alert">
+            <span class="warning-icon">⚠</span> Por favor revisa los campos marcados antes de enviar.
+          </p>
+          <button type="submit" class="btn-submit" [class.btn-submit--loading]="submitSuccess">
+            <span class="btn-submit__text">{{ isAdoption ? '🐾 Enviar solicitud de adopción' : '🔍 Reportar mascota perdida' }}</span>
+          </button>
+        </div>
+
+      </form>
     </div>
 
-    <!-- Success banner -->
-    <div class="success-banner" *ngIf="submitSuccess" role="alert">
-      <span class="success-banner__icon">✓</span>
-      <span>¡Solicitud enviada exitosamente! Nos pondremos en contacto contigo pronto.</span>
-    </div>
+    <!-- ── DERECHA: Formulario de Registro de Mascota ── -->
+    <app-pet-register></app-pet-register>
 
-    <!-- Form -->
-    <form [formGroup]="adoptionForm" (ngSubmit)="submitForm()" novalidate class="form-body">
-
-      <!-- Row: Name + Email -->
-      <div class="form-row form-row--2col">
-
-        <div class="field-group" [class.field-group--error]="isInvalid('fullName')" [class.field-group--ok]="isValid('fullName')">
-          <label class="field-label" for="fullName">
-            Nombre completo <span class="required-dot">*</span>
-          </label>
-          <div class="field-input-wrap">
-            <input
-              id="fullName"
-              type="text"
-              class="field-input"
-              formControlName="fullName"
-              placeholder="Ej. María García López"
-              autocomplete="name" />
-            <span class="field-icon field-icon--ok">✓</span>
-            <span class="field-icon field-icon--err">✕</span>
-          </div>
-          <p class="field-error" *ngIf="isInvalid('fullName')" role="alert">
-            <span class="error-dot">●</span> {{ getError('fullName') }}
-          </p>
-        </div>
-
-        <div class="field-group" [class.field-group--error]="isInvalid('email')" [class.field-group--ok]="isValid('email')">
-          <label class="field-label" for="email">
-            Correo electrónico <span class="required-dot">*</span>
-          </label>
-          <div class="field-input-wrap">
-            <input
-              id="email"
-              type="email"
-              class="field-input"
-              formControlName="email"
-              placeholder="correo@ejemplo.com"
-              autocomplete="email" />
-            <span class="field-icon field-icon--ok">✓</span>
-            <span class="field-icon field-icon--err">✕</span>
-          </div>
-          <p class="field-error" *ngIf="isInvalid('email')" role="alert">
-            <span class="error-dot">●</span> {{ getError('email') }}
-          </p>
-        </div>
-
-      </div>
-
-      <!-- Row: Phone + Age -->
-      <div class="form-row form-row--2col">
-
-        <div class="field-group" [class.field-group--error]="isInvalid('phone')" [class.field-group--ok]="isValid('phone')">
-          <label class="field-label" for="phone">
-            Teléfono <span class="required-dot">*</span>
-          </label>
-          <div class="field-input-wrap">
-            <input
-              id="phone"
-              type="tel"
-              class="field-input"
-              formControlName="phone"
-              placeholder="+593 99 123 4567"
-              autocomplete="tel" />
-            <span class="field-icon field-icon--ok">✓</span>
-            <span class="field-icon field-icon--err">✕</span>
-          </div>
-          <p class="field-error" *ngIf="isInvalid('phone')" role="alert">
-            <span class="error-dot">●</span> {{ getError('phone') }}
-          </p>
-        </div>
-
-        <div class="field-group" [class.field-group--error]="isInvalid('age')" [class.field-group--ok]="isValid('age')">
-          <label class="field-label" for="age">
-            Edad <span class="required-dot">*</span>
-          </label>
-          <div class="field-input-wrap">
-            <input
-              id="age"
-              type="number"
-              class="field-input"
-              formControlName="age"
-              placeholder="Mayor de 18 años"
-              min="1" max="120" />
-            <span class="field-icon field-icon--ok">✓</span>
-            <span class="field-icon field-icon--err">✕</span>
-          </div>
-          <p class="field-error" *ngIf="isInvalid('age')" role="alert">
-            <span class="error-dot">●</span> {{ getError('age') }}
-          </p>
-          <p class="field-hint" *ngIf="!isInvalid('age')">Debes tener 18 años o más.</p>
-        </div>
-
-      </div>
-
-      <!-- Address -->
-      <div class="field-group" [class.field-group--error]="isInvalid('address')" [class.field-group--ok]="isValid('address')">
-        <label class="field-label" for="address">
-          Dirección <span class="required-dot">*</span>
-        </label>
-        <div class="field-input-wrap">
-          <input
-            id="address"
-            type="text"
-            class="field-input"
-            formControlName="address"
-            placeholder="Calle, número, ciudad"
-            autocomplete="street-address" />
-          <span class="field-icon field-icon--ok">✓</span>
-          <span class="field-icon field-icon--err">✕</span>
-        </div>
-        <p class="field-error" *ngIf="isInvalid('address')" role="alert">
-          <span class="error-dot">●</span> {{ getError('address') }}
-        </p>
-      </div>
-
-      <!-- Divider -->
-      <div class="form-divider">
-        <span>{{ isAdoption ? 'Sobre la mascota que deseas adoptar' : 'Sobre tu mascota perdida' }}</span>
-      </div>
-
-      <!-- Pet Name -->
-      <div class="field-group" [class.field-group--error]="isInvalid('petName')" [class.field-group--ok]="isValid('petName')">
-        <label class="field-label" for="petName">
-          {{ isAdoption ? 'Nombre de la mascota' : 'Nombre de tu mascota' }}
-          <span class="required-dot">*</span>
-        </label>
-        <div class="field-input-wrap">
-          <input
-            id="petName"
-            type="text"
-            class="field-input"
-            formControlName="petName"
-            [placeholder]="isAdoption ? 'Ej. Firulais' : 'Nombre de tu mascota perdida'" />
-          <span class="field-icon field-icon--ok">✓</span>
-          <span class="field-icon field-icon--err">✕</span>
-        </div>
-        <p class="field-error" *ngIf="isInvalid('petName')" role="alert">
-          <span class="error-dot">●</span> {{ getError('petName') }}
-        </p>
-      </div>
-
-      <!-- Pet Description -->
-      <div class="field-group" [class.field-group--error]="isInvalid('petDescription')" [class.field-group--ok]="isValid('petDescription')">
-        <label class="field-label" for="petDescription">
-          {{ isAdoption ? 'Descripción / por qué quieres adoptar' : 'Descripción de la mascota perdida' }}
-          <span class="required-dot">*</span>
-        </label>
-        <div class="field-input-wrap">
-          <textarea
-            id="petDescription"
-            class="field-input field-input--textarea"
-            formControlName="petDescription"
-            rows="4"
-            [placeholder]="isAdoption
-              ? 'Cuéntanos sobre tu hogar, estilo de vida y por qué deseas adoptar...'
-              : 'Describe su color, raza, tamaño, señas particulares y lugar donde se perdió...'">
-          </textarea>
-          <span class="field-icon field-icon--ok field-icon--textarea">✓</span>
-          <span class="field-icon field-icon--err field-icon--textarea">✕</span>
-        </div>
-        <p class="field-error" *ngIf="isInvalid('petDescription')" role="alert">
-          <span class="error-dot">●</span> {{ getError('petDescription') }}
-        </p>
-        <p class="field-hint" *ngIf="!isInvalid('petDescription')">Mínimo 20 caracteres.</p>
-      </div>
-
-      <!-- Message (optional) -->
-      <div class="field-group">
-        <label class="field-label" for="message">
-          Mensaje adicional
-          <span class="optional-tag">Opcional</span>
-        </label>
-        <div class="field-input-wrap">
-          <textarea
-            id="message"
-            class="field-input field-input--textarea"
-            formControlName="message"
-            rows="3"
-            placeholder="¿Algo más que quieras contarnos?">
-          </textarea>
-        </div>
-      </div>
-
-      <!-- Submit -->
-      <div class="form-actions">
-        <p class="form-warning" *ngIf="submitted && adoptionForm.invalid" role="alert">
-          <span class="warning-icon">⚠</span>
-          Por favor revisa los campos marcados antes de enviar.
-        </p>
-        <button type="submit" class="btn-submit" [class.btn-submit--loading]="submitSuccess">
-          <span class="btn-submit__text">
-            {{ isAdoption ? '🐾 Enviar solicitud de adopción' : '🔍 Reportar mascota perdida' }}
-          </span>
-        </button>
-      </div>
-
-    </form>
   </div>
 </section>
