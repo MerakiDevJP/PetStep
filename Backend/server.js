@@ -1,7 +1,9 @@
 // server.js
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+const connectDB = require('./config/db');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,6 +11,9 @@ const PORT = process.env.PORT || 3000;
 // Middlewares
 app.use(cors());
 app.use(express.json());
+
+// Conectar a la base de datos
+connectDB();
 
 // IMPORTAR RUTAS MODULARIZADAS
 const petRoutes = require('./routes/pet.routes');
