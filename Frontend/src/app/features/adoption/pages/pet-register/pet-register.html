@@ -1,0 +1,151 @@
+<div class="pet-card">
+
+  <!-- Header verde -->
+  <div class="pet-card__header">
+    <div class="pet-header-text">
+      <h2 class="pet-card__title">Registrar mascota</h2>
+      <p class="pet-card__subtitle">Completa la información para añadir una mascota al sistema.</p>
+    </div>
+  </div>
+
+  <!-- Success banner -->
+  <div class="pet-success-banner" *ngIf="submitSuccess" role="alert">
+    <span class="pet-success-banner__icon">✓</span>
+    <span>¡Mascota registrada exitosamente!</span>
+  </div>
+
+  <form [formGroup]="petForm" (ngSubmit)="submitForm()" novalidate class="pet-form-body">
+
+    <!-- Nombre + Especie -->
+    <div class="pet-row">
+      <div class="pet-fg" [class.pet-fg--err]="isInvalid('nombre')" [class.pet-fg--ok]="isValid('nombre')">
+        <label class="pet-label" for="p-nombre">Nombre <span class="p-req">*</span></label>
+        <div class="pet-iwrap">
+          <input id="p-nombre" type="text" class="pet-input" formControlName="nombre" placeholder="Ej. Luna" />
+          <span class="p-icon p-ok">✓</span><span class="p-icon p-err">✕</span>
+        </div>
+        <p class="pet-error" *ngIf="isInvalid('nombre')" role="alert">
+          <span class="p-edot">●</span> {{ getError('nombre') }}
+        </p>
+      </div>
+
+      <div class="pet-fg" [class.pet-fg--err]="isInvalid('especie')" [class.pet-fg--ok]="isValid('especie')">
+        <label class="pet-label" for="p-especie">Especie <span class="p-req">*</span></label>
+        <div class="pet-iwrap">
+          <select id="p-especie" class="pet-input pet-select" formControlName="especie">
+            <option value="" disabled>Seleccionar...</option>
+            <option *ngFor="let e of especieOptions" [value]="e">{{ e }}</option>
+          </select>
+        </div>
+        <p class="pet-error" *ngIf="isInvalid('especie')" role="alert">
+          <span class="p-edot">●</span> {{ getError('especie') }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Estado + Foto URL -->
+    <div class="pet-row">
+      <div class="pet-fg" [class.pet-fg--err]="isInvalid('estado')" [class.pet-fg--ok]="isValid('estado')">
+        <label class="pet-label" for="p-estado">Estado <span class="p-req">*</span></label>
+        <div class="pet-iwrap">
+          <select id="p-estado" class="pet-input pet-select" formControlName="estado">
+            <option *ngFor="let s of estadoOptions" [value]="s">{{ s }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pet-fg" [class.pet-fg--err]="isInvalid('fotoUrl')" [class.pet-fg--ok]="isValid('fotoUrl')">
+        <label class="pet-label" for="p-foto">URL de foto <span class="p-req">*</span></label>
+        <div class="pet-iwrap">
+          <input id="p-foto" type="url" class="pet-input" formControlName="fotoUrl" placeholder="https://..." />
+          <span class="p-icon p-ok">✓</span><span class="p-icon p-err">✕</span>
+        </div>
+        <p class="pet-error" *ngIf="isInvalid('fotoUrl')" role="alert">
+          <span class="p-edot">●</span> {{ getError('fotoUrl') }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Historia -->
+    <div class="pet-fg" [class.pet-fg--err]="isInvalid('historia')" [class.pet-fg--ok]="isValid('historia')">
+      <label class="pet-label" for="p-historia">Historia <span class="p-req">*</span></label>
+      <div class="pet-iwrap">
+        <textarea id="p-historia" class="pet-input pet-textarea" formControlName="historia" rows="3"
+          placeholder="Cuenta la historia de esta mascota..."></textarea>
+        <span class="p-icon p-icon-ta p-ok">✓</span><span class="p-icon p-icon-ta p-err">✕</span>
+      </div>
+      <p class="pet-error" *ngIf="isInvalid('historia')" role="alert">
+        <span class="p-edot">●</span> {{ getError('historia') }}
+      </p>
+    </div>
+
+    <!-- Salud + Temperamento -->
+    <div class="pet-row">
+      <div class="pet-fg" [class.pet-fg--err]="isInvalid('salud')" [class.pet-fg--ok]="isValid('salud')">
+        <label class="pet-label" for="p-salud">Salud <span class="p-req">*</span></label>
+        <div class="pet-iwrap">
+          <textarea id="p-salud" class="pet-input pet-textarea" formControlName="salud" rows="2"
+            placeholder="Estado de salud, vacunas..."></textarea>
+        </div>
+        <p class="pet-error" *ngIf="isInvalid('salud')" role="alert">
+          <span class="p-edot">●</span> {{ getError('salud') }}
+        </p>
+      </div>
+
+      <div class="pet-fg" [class.pet-fg--err]="isInvalid('temperamento')" [class.pet-fg--ok]="isValid('temperamento')">
+        <label class="pet-label" for="p-temp">Temperamento <span class="p-req">*</span></label>
+        <div class="pet-iwrap">
+          <textarea id="p-temp" class="pet-input pet-textarea" formControlName="temperamento" rows="2"
+            placeholder="Carácter, comportamiento..."></textarea>
+        </div>
+        <p class="pet-error" *ngIf="isInvalid('temperamento')" role="alert">
+          <span class="p-edot">●</span> {{ getError('temperamento') }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Comentarios -->
+    <div class="pet-divider"><span>Comentarios</span></div>
+
+    <div formArrayName="comentarios" class="comentarios-list">
+      <div *ngFor="let c of comentarios.controls; let i = index"
+           [formGroupName]="i" class="comentario-item">
+        <div class="comentario-header">
+          <span class="comentario-num">Comentario {{ i + 1 }}</span>
+          <button type="button" class="btn-remove-comment" (click)="removeComentario(i)">✕ Eliminar</button>
+        </div>
+        <div class="pet-row">
+          <div class="pet-fg" [class.pet-fg--err]="isCommentInvalid(i, 'autor')">
+            <label class="pet-label">Autor <span class="p-req">*</span></label>
+            <input type="text" class="pet-input" formControlName="autor" placeholder="Nombre del autor" />
+            <p class="pet-error" *ngIf="isCommentInvalid(i, 'autor')" role="alert">
+              <span class="p-edot">●</span> Obligatorio.
+            </p>
+          </div>
+          <div class="pet-fg" [class.pet-fg--err]="isCommentInvalid(i, 'texto')">
+            <label class="pet-label">Texto <span class="p-req">*</span></label>
+            <input type="text" class="pet-input" formControlName="texto" placeholder="Contenido del comentario" />
+            <p class="pet-error" *ngIf="isCommentInvalid(i, 'texto')" role="alert">
+              <span class="p-edot">●</span> Mínimo 5 caracteres.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="btn-add-comment" (click)="addComentario()">
+      + Agregar comentario
+    </button>
+
+    <!-- Submit -->
+    <div class="pet-actions">
+      <p class="pet-warning" *ngIf="submitted && petForm.invalid" role="alert">
+        <span>⚠</span> Por favor revisa los campos marcados antes de guardar.
+      </p>
+      <button type="submit" class="btn-pet-submit">
+        🐶 Registrar mascota
+      </button>
+    </div>
+
+  </form>
+</div>
