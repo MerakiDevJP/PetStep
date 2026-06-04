@@ -8,6 +8,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
+import { PetService } from '../../../../core/services/pet';
 
 @Component({
   selector: 'app-pet-register',
