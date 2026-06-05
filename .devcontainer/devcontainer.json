@@ -6,7 +6,7 @@
   ],
   // Indicamos que el servicio principal para el DevContainer es 'angular'
   "service": "angular",
-  "workspaceFolder": "/workspace/angular/Pet-Step/Frontend",
+  "workspaceFolder": "/workspace/angular/PetStep/Frontend",
   "customizations": {
     "vscode": {
       "extensions": [
