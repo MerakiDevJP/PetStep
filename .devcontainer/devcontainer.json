@@ -21,7 +21,7 @@
     }
   },
   // Ejecutamos esto al crear el contenedor para asegurar que tengas el CLI de Angular
-  "postCreateCommand": "npm install -g @angular/cli@latest",
+ "postCreateCommand": "mkdir -p ~/.npm-global && npm config set prefix '~/.npm-global' && export PATH=~/.npm-global/bin:$PATH && npm install -g @angular/cli@19.0.0",
   // Mantenemos abiertos los puertos definidos en tu compose
   "forwardPorts": [4200, 3000, 27017],
   "remoteUser": "node"
