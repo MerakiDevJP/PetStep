@@ -30,7 +30,19 @@
     </div>
   </div>
 
-  <!-- 2. Sección: Adoptados -->
+  <!-- 2. Sección: En Proceso de Adopción -->
+   <div class="category-section">
+    <h3 class="section-label processing">⏳ En Proceso de Adopción</h3>
+    <div class="gallery-grid">
+      @for (item of enProceso(); track item.id) {
+        <app-pet-card [pet]="item"></app-pet-card>
+      } @empty { 
+        <p class="empty-text">No hay solicitudes de adopción en trámite o coincidentes.</p> 
+      }
+    </div>
+  </div>
+  
+  <!-- 3.  Sección: Adoptados -->
   <div class="category-section">
     <h3 class="section-label adopted">🎉 Final feliz (Adoptados)</h3>
     <div class="gallery-grid">

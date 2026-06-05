@@ -84,8 +84,9 @@
 
     /* Bordes de color personalizados según el estado del flujo */
     &.adoption { color: var(--dark-text); border-bottom-color: var(--secondary-azul); }
+    &.processing { color: var(--primary-naranja); border-bottom-color: var(--primary-naranja); }
     &.adopted { color: var(--support-verde); border-bottom-color: var(--support-verde); }
-    &.lost { color: var(--primary-rojo); border-bottom-color: var(--primary-rojo); }
+    &.lost { color: var(--texture-salmon); border-bottom-color: var(--texture-salmon); }
     &.recovered { color: var(--accent-amarillo); border-bottom-color: var(--accent-amarillo); }
   }
 }

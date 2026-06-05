@@ -1,4 +1,4 @@
-import { Component, inject, computed, signal } from '@angular/core'; // Se añade 'signal'
+import { Component, inject, computed, signal, OnInit } from '@angular/core'; // Se añade 'signal'
 import { CommonModule } from '@angular/common';
 import { PetCardComponent } from '../../shared/components/pet-card/pet-card.component';
 import { PetService } from '../../core/services/pet.service';
@@ -11,8 +11,14 @@ import { PetStatus } from '../../core/models/pet.model';
   templateUrl: './pet-gallery.component.html',
   styleUrls: ['./pet-gallery.component.scss']
 })
-export class PetGalleryComponent {
+export class PetGalleryComponent implements OnInit {
   private readonly _petService = inject(PetService);
+  /**
+   * Ciclo de vida inicial: Manda a llamar a las mascotas del backend
+   */
+  ngOnInit(): void {
+    this._petService.getAllPets();
+  }
 
   /**
    * Estado reactivo local para almacenar el filtro por especie.
@@ -25,6 +31,10 @@ export class PetGalleryComponent {
    */
   public enAdopcion = computed(() => 
     this._filtrarMascotasPorEspecie(PetStatus.DISPONIBLE)
+  );
+
+  public enProceso = computed(() => 
+    this._filtrarMascotasPorEspecie(PetStatus.EN_PROCESO)
   );
 
   public adoptados = computed(() => 
