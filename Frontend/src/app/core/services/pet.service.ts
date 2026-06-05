@@ -6,7 +6,7 @@ import { Pet, PetStatus } from '../models/pet.model';
 
 @Injectable({ providedIn: 'root' })
 export class PetService {
-  private readonly API_URL = 'http://localhost:3000/api/pets';
+  private readonly API_URL = 'http://localhost:3000/gallery';
 
   // Se expande el arreglo a 10 mascotas balanceadas entre estados y especies para pruebas de UI
   private petsSignal = signal<Pet[]>([
