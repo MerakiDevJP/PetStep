@@ -35,3 +35,6 @@ logs
 
 # Excluir metadatos ocultos y flujos alternativos de Windows
 *:Zone.Identifier*.mongodb.js
+
+# --- MongoDB ---
+*.mongodb.js
