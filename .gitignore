@@ -32,8 +32,6 @@ logs
 
 # DevContainer & Local Env
 #.devcontainer/
-.env
-*.log
 
 # Excluir metadatos ocultos y flujos alternativos de Windows
-*:Zone.Identifier
+*:Zone.Identifier*.mongodb.js
