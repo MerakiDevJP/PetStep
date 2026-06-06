@@ -18,7 +18,24 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 3rem 1rem 4rem;
+  padding: 3rem 1.5rem 4rem;
+}
+
+// ── Layout de dos columnas ────────────────────────────────────
+.forms-layout {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1320px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
+  align-items: flex-start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    max-width: 680px;
+  }
   overflow: hidden;
   background-color: var(--bg-crema);
 }
@@ -51,9 +68,7 @@
 // ── Tarjeta principal ────────────────────────────────────────
 .form-card {
   position: relative;
-  z-index: 1;
   width: 100%;
-  max-width: 680px;
   background: #ffffff;
   border-radius: 20px;
   box-shadow:
@@ -87,7 +102,16 @@
   }
 }
 
-
+.header-icon {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  background: rgba(255,255,255,.2);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 // ── Toggle de modo ───────────────────────────────────────────
 .mode-toggle {
@@ -451,4 +475,8 @@
   }
 
   .success-banner { margin: .75rem 1.25rem; }
+}
+
+app-pet-register {
+  display: contents;
 }

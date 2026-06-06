@@ -1,83 +1,177 @@
 // controllers/pet.controller.js
+const Pet = require('../models/pet.model');
+const AdoptionRequest = require('../models/adoptionRequest.model');
 
-// 1. GET: Obtener todas las mascotas (Para la Galería del Dev 3)
-// controllers/pet.controller.js
+// 1. GET: Obtener mascotas con o sin filtro de especie
+const getPets = async (req, res) => {
+    try {
+        const { especie } = req.query; 
+        console.log(`Request recibida. Buscando mascotas de especie: ${especie || 'Todas'}`);
 
-const getPets = (req, res) => {
-    // Capturamos los query params de la Request (Ej: /api/pets?especie=Gecko)
-    const { especie } = req.query; 
+        let filtro = {};
+        if (especie) {
+            // Busqueda insensible a mayúsculas/minúsculas con Regex
+            filtro.species = { $regex: new RegExp(especie, 'i') };
+        }
 
-    console.log(`Request recibida. Buscando mascotas de especie: ${especie || 'Todas'}`);
-
-    const baseMascotas = [
-        { id: 1, nombre: 'Gunter', especie: 'Gecko', estado: 'DISPONIBLE' },
-        { id: 2, nombre: 'Chimuelo', especie: 'Ajolote', estado: 'EN_PROCESO' }
-    ];
-
-    // Lógica interna basada en la Request
-    if (especie) {
-        const filtradas = baseMascotas.filter(m => m.especie.toLowerCase() === especie.toLowerCase());
-        // Se envía una Response exitosa (200) con los datos filtrados
-        return res.status(200).json(filtradas);
+        const mascotas = await Pet.find(filtro);
+        res.status(200).json(mascotas);
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error', message: error.message });
     }
-
-    // Response por defecto si no hay filtros
-    res.status(200).json(baseMascotas);
 };
 
-// 2. GET: Obtener una sola mascota por su ID (Para la vista de detalle)
-const getPetById = (req, res) => {
-    const { id } = req.params;
-    res.status(200).json({ id, nombre: 'Gunter', especie: 'Gecko', estado: 'DISPONIBLE' });
+// 2. GET: Obtener una sola mascota por ID
+const getPetById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const mascota = await Pet.findById(id);
+        
+        if (!mascota) {
+            return res.status(404).json({ error: 'Not Found', message: 'Mascota no encontrada' });
+        }
+        res.status(200).json(mascota);
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error', message: error.message });
+    }
 };
 
-// 3. POST: Registrar una nueva mascota en el refugio
-const createPet = (req, res) => {
-    const nuevaMascota = req.body;
-    res.status(201).json({ message: 'Mascota registrada', data: nuevaMascota });
-};
-
-// 4. POST: Crear una solicitud de adopción (Para el Formulario Reactivo del Dev 2)
-const createAdoption = (req, res) => {
-    // Se capturam el cuerpo de la Request enviado desde el Formulario Reactivo
-    const { nombreAdoptante, correo, mascotaId } = req.body;
-
-    // Validación de la Request: Si faltan campos obligatorios
-    if (!nombreAdoptante || !correo || !mascotaId) {
-        // Se devuelve una Response con código 400 (Error del cliente)
-        return res.status(400).json({
-            error: 'Bad Request',
-            message: 'Faltan campos obligatorios en la petición (nombreAdoptante, correo o mascotaId).'
+// 3. POST: Registrar una nueva mascota
+const createPet = async (req, res) => {
+    try {
+        // Mapeo a los campos que recibe Express al Schema de Mongoose
+        const nuevaMascota = new Pet({
+            name: req.body.nombre,
+            species: req.body.especie,
+            breed: req.body.raza,
+            age: req.body.edad,
+            description: req.body.descripcion,
+            status: req.body.estado || 'Disponible'
         });
+
+        const mascotaGuardada = await nuevaMascota.save();
+        res.status(201).json({ message: 'Mascota registrada en MongoDB', data: mascotaGuardada });
+    } catch (error) {
+        res.status(400).json({ error: 'Bad Request', message: error.message });
     }
-
-    // Si todo está bien, se procesa y devuelve un código 201 (Creado)
-    res.status(201).json({
-        message: '¡Solicitud de adopción procesada con éxito!',
-        data: { nombreAdoptante, correo, mascotaId, fechaRegistro: new Date() }
-    });
 };
 
-// 5. PATCH: Actualizar SOLO el estado (Evita transiciones inválidas - Dev 1)
-const updatePetStatus = (req, res) => {
-    const { id } = req.params;
-    const { nuevoEstado } = req.body; // Ejemplo: 'EN_PROCESO' o 'ADOPTADO'
-    
-    // Aquí irá la máquina de estados lógica que planeamos. Por ahora simulamos:
-    res.status(200).json({
-        message: `Estado de la mascota ${id} actualizado con éxito a: ${nuevoEstado}`,
-        auditoria: { cambiadoPor: 'Admin_Refugio', fecha: new Date() }
-    });
+// 4. POST: Formulario de adopción
+const createAdoption = async (req, res) => {
+    try {
+        const { nombreAdoptante, correo, mascotaId, edadAdoptante, telefono, motivos } = req.body;
+
+        if (!nombreAdoptante || !correo || !mascotaId) {
+            return res.status(400).json({
+                error: 'Bad Request',
+                message: 'Faltan campos obligatorios en la petición (nombreAdoptante, correo o mascotaId).'
+            });
+        }
+
+        // Verificar si la mascota existe en Mongo
+        const mascota = await Pet.findById(mascotaId);
+        if (!mascota) {
+            return res.status(404).json({ error: 'Not Found', message: 'La mascota especificada no existe.' });
+        }
+
+        // Crear la solicitud en su colección
+        const nuevaSolicitud = new AdoptionRequest({
+            pet: mascotaId,
+            applicantName: nombreAdoptante,
+            applicantAge: edadAdoptante || 18, // Fallback por seguridad
+            email: correo,
+            phone: telefono || 'Sin teléfono',
+            reasons: motivos || 'Sin motivos especificados'
+        });
+
+        const solicitudGuardada = await nuevaSolicitud.save();
+
+        // Cambiar estado de la mascota de forma relacional
+        mascota.status = 'En Proceso';
+        await mascota.save();
+
+        res.status(201).json({
+            message: '¡Solicitud de adopción procesada y guardada con éxito!',
+            data: solicitudGuardada
+        });
+    } catch (error) {
+        res.status(400).json({ error: 'Bad Request', message: error.message });
+    }
 };
 
-// 6. POST: Añadir comentarios/fotos de seguimiento post-adopción (SRP - Dev 3)
-const addPetTracking = (req, res) => {
+// 5. POST: Línea de tiempo / Seguimiento 
+const addPetTracking = async (req, res) => {
     const { id } = req.params;
-    const { comentario, fotoUrl } = req.body;
-    res.status(201).json({
-        message: `Seguimiento añadido a la línea de tiempo de la mascota ${id}`,
-        data: { comentario, fotoUrl, fecha: new Date() }
-    });
+    const { comentario } = req.body;
+    res.status(201).json({ message: 'Seguimiento añadido', petId: id, comentario });
+};
+
+// 6. PUT: Actualización TOTAL de una mascota
+const updatePetFull = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const datosActualizados = {
+            name: req.body.nombre,
+            species: req.body.especie,
+            breed: req.body.raza,
+            age: req.body.edad,
+            description: req.body.descripcion,
+            status: req.body.estado
+        };
+
+        const mascotaActualizada = await Pet.findByIdAndUpdate(id, datosActualizados, { new: true, runValidators: true });
+        
+        if (!mascotaActualizada) {
+            return res.status(404).json({ error: 'Not Found', message: 'Mascota no encontrada' });
+        }
+
+        res.status(200).json({
+            message: `PUT - Perfil de la mascota ${id} actualizado por completo en MongoDB.`,
+            data: mascotaActualizada
+        });
+    } catch (error) {
+        res.status(400).json({ error: 'Bad Request', message: error.message });
+    }
+};
+
+// 7. PATCH: Actualización PARCIAL (Solo el estado)
+const updatePetStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { estado } = req.body; 
+
+        const mascotaActualizada = await Pet.findByIdAndUpdate(id, { status: estado }, { new: true, runValidators: true });
+
+        if (!mascotaActualizada) {
+            return res.status(404).json({ error: 'Not Found', message: 'Mascota no encontrada' });
+        }
+
+        res.status(200).json({
+            message: `PATCH - Estado de la mascota ${id} cambiado a ${estado}.`,
+            data: mascotaActualizada,
+            fecha: new Date()
+        });
+    } catch (error) {
+        res.status(400).json({ error: 'Bad Request', message: error.message });
+    }
+};
+
+// 8. DELETE: Eliminación del sistema
+const deletePet = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const mascotaEliminada = await Pet.findByIdAndDelete(id);
+
+        if (!mascotaEliminada) {
+            return res.status(404).json({ error: 'Not Found', message: 'Mascota no encontrada' });
+        }
+
+        res.status(200).json({
+            message: `DELETE - Mascota con ID ${id} eliminada correctamente de MongoDB.`
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error', message: error.message });
+    }
 };
 
 module.exports = {
@@ -85,6 +179,8 @@ module.exports = {
     getPetById,
     createPet,
     createAdoption,
+    addPetTracking,
+    updatePetFull,
     updatePetStatus,
-    addPetTracking
+    deletePet
 };
