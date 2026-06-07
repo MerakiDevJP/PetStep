@@ -1,51 +1,78 @@
 <section class="strategic-container">
   <header class="strategic-header">
-    <h1> Pet-Step</h1>
+    <h1>Pet-Step</h1>
     <p class="subtitle">Ecosistema tecnológico para la trazabilidad y protección animal</p>
+    <div class="project-extended-description">
+      <p>
+        PetStep es una plataforma web reactiva e intuitiva 
+        diseñada para mitigar la fragmentación de la información 
+        en los refugios de fauna urbana. A través de arquitecturas basadas en flujos de estado estrictos, garantizamos la trazabilidad absoluta de cada mascota desde su rescate hasta su adopción definitiva y monitoreo post-adopción, promoviendo el bienestar animal mediante ingeniería de software con propósito.
+      </p>
+    </div>
   </header>
 
   <hr class="divider">
 
-  <!-- Sección Misión y Visión -->
   <div class="grid-mision-vision">
-    <article 
-      class="card-strategic-info"
-      (mouseenter)="onMostrarImagen('mision')"
-      (mouseleave)="onOcultarImagen()">
-      <h2><i class="bi bi-bullseye"></i> Misión</h2>
-      <p>{{ mision() }}</p>
+    
+    <article class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <img [src]="imgMision" alt="Misión PetStep" class="strategic-img">
+          <div class="card-overlay-title">
+            <h2><i class="bi bi-bullseye"></i> Misión</h2>
+          </div>
+        </div>
+        <div class="flip-card-back mision-back">
+          <h2><i class="bi bi-bullseye"></i> Misión</h2>
+          <p>{{ mision() }}</p>
+        </div>
+      </div>
     </article>
 
-    <article 
-      class="card-strategic-info"
-      (mouseenter)="onMostrarImagen('vision')"
-      (mouseleave)="onOcultarImagen()">
-      <h2><i class="bi bi-eye"></i> Visión</h2>
-      <p>{{ vision() }}</p>
+    <article class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <img [src]="imgVision" alt="Visión PetStep" class="strategic-img">
+          <div class="card-overlay-title">
+            <h2><i class="bi bi-eye"></i> Visión</h2>
+          </div>
+        </div>
+        <div class="flip-card-back vision-back">
+          <h2><i class="bi bi-eye"></i> Visión</h2>
+          <p>{{ vision() }}</p>
+        </div>
+      </div>
     </article>
+
   </div>
 
-  <!-- Contenedor dinámico de previsualización asíncrona -->
-  @if (imagenActualUrl()) {
-    <div class="preview-overlay">
-      <img [src]="imagenActualUrl()" alt="Visualización estratégica" class="preview-img">
-    </div>
-  }
-
-  <!-- Sección Valores Estratégicos -->
   <footer class="valores-section">
-    <h2>Valores Pilares del Desarrollo</h2>
+    <h2>Valores de PetStep</h2>
     <div class="grid-valores">
       @for (valor of valores(); track valor.id) {
         <div 
           class="valor-card" 
           [class.active]="valorSeleccionadoId() === valor.id"
-          (click)="onSeleccionarValor(valor.id)">
-          <div class="icon-box">
-            <i [class]="'bi ' + valor.icono"></i>
+          tabindex="0"
+          (click)="onSeleccionarValor(valor.id)"
+          (keydown.enter)="onSeleccionarValor(valor.id)"
+          (keydown.space)="$event.preventDefault(); onSeleccionarValor(valor.id)">
+          
+          <div class="valor-img-container">
+            <img [src]="valor.imagenUrl" [alt]="valor.titulo" class="valor-img">
+            <div class="icon-box">
+              <i [class]="'bi ' + valor.icono"></i>
+            </div>
           </div>
-          <h3>{{ valor.titulo }}</h3>
-          <p>{{ valor.descripcion }}</p>
+
+          <div class="valor-text-content">
+            <h3>{{ valor.titulo }}</h3>
+            <p [class.show]="valorSeleccionadoId() === valor.id">{{ valor.descripcion }}</p>
+            <span class="interactive-label">
+              {{ valorSeleccionadoId() === valor.id ? 'Ocultar' : 'Ver detalle' }}
+            </span>
+          </div>
         </div>
       }
     </div>

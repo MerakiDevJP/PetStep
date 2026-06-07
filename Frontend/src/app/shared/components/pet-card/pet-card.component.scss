@@ -1,141 +1,276 @@
 /* src/app/shared/components/pet-card/pet-card.component.scss */
 
 :host {
-  // Eliminamos el ancho fijo rígido para que obedezca al flex-grid del padre
   display: block;
   width: 100%; 
-  --card-height: 400px;
+  height: 500px; /* 🚀 ALTURA ÚNICA E INAMOVIBLE PARA TODAS LAS TARJETAS */
   --transition-speed: 0.6s;
 }
 
-/* * Contenedor principal adaptable 
- * Mantiene la perspectiva 3D necesaria para el patrón Flip.
- */
 .card-container {
-  width: 100%; /* Toma el 100% del espacio de la celda asignada por el Grid */
-  height: var(--card-height);
+  width: 100%; 
+  height: 100%;
   perspective: 1000px;
   cursor: pointer;
-  box-sizing: border-box;
 
-  /* * Elemento interno que realiza la rotación física */
   .card-inner {
     position: relative;
     width: 100%;
     height: 100%;
-    text-align: center;
     transition: transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
-    box-shadow: 0 4px 15px rgba(11, 37, 69, 0.06); /* Sombra suave usando el azul oscuro */
-    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(11, 37, 69, 0.06);
+    border-radius: 16px;
 
-    /* Activación del giro por el ViewModel/Directiva */
     &.flipped {
       transform: rotateY(180deg);
     }
   }
 
-  /* * Configuración de las caras frontal y posterior */
   .card-front, .card-back {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; /*Fuerza a ambas caras a llenar la caja de 500px sin importar el contenido */
     backface-visibility: hidden;
-    border-radius: 15px;
+    border-radius: 16px;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    background-color: #FFFFFF; /* Fondo blanco limpio para la tarjeta */
+    background-color: #FFFFFF;
     box-sizing: border-box;
   }
 
-  /* ==========================================================================
-     CARA FRONTAL (UI/UX)
-     ========================================================================== */
+  /* CARA FRONTAL */
   .card-front {
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+
+    .img-container-high {
+      width: 100%;
+      height: 380px; /* Altura fija para la imagen frontal */
+      background-color: #F8FAFC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
 
     .pet-img {
       width: 100%;
-      height: 250px;
-      object-fit: cover; /* Mantiene proporción del perrito/gatito sin deformarse */
+      height: 100%;
+      object-fit: cover;
     }
 
-    h2 {
-      color: var(--dark-text); /* Azul Oscuro Institucional */
-      margin: 18px 0 5px;
-      font-size: 1.5rem;
-      font-weight: 700;
-    }
-
-    /* El badge cambia de color de fondo automáticamente según el estado */
     .status-badge {
       position: absolute;
-      top: 15px;
-      right: 15px;
-      padding: 6px 14px;
+      top: 12px;
+      right: 12px;
+      padding: 4px 10px;
       color: white;
       border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: bold;
+      font-size: 0.7rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-      background-color: var(--secondary-azul); /* Color por defecto */
+      z-index: 10;
+    }
 
-      // Clases dinámicas asignadas según el flujo actual de la mascota
-      &.adoption { background-color: var(--secondary-azul); } /* Azul Eléctrico */
-      &.adopted { background-color: var(--support-verde); }    /* Verde Crecimiento */
-      &.lost { background-color: var(--primary-rojo); }       /* Rojo Esperanza */
-      &.recovered { background-color: var(--accent-amarillo); color: var(--dark-text); } /* Amarillo Sol */
+    .info-front-compact {
+      padding: 12px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex-grow: 1; /* Absorbe el espacio restante de forma exacta */
+
+      h2 {
+        color: #0B2545;
+        margin: 0 0 2px 0;
+        font-size: 1.7rem; 
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+
+      .small-species {
+        font-size: 1.05rem; 
+        color: #64748B;
+        font-weight: 600;
+      }
     }
   }
 
-  /* ==========================================================================
-     CARA POSTERIOR (UI/UX)
-     ========================================================================== */
+  /* CARA POSTERIOR (Formulario y Detalles con Scroll Interno Mandatorio) */
   .card-back {
-    transform: rotateY(180deg); /* Posición inicial invertida */
-    justify-content: center;
-    align-items: center;
-    padding: 25px;
-    background-color: #FAFAFA;
-    border: 2px solid var(--secondary-azul); /* Borde con el Azul Eléctrico de interacción */
+    transform: rotateY(180deg);
+    padding: 16px;
+    border: 2px solid #004BFF;
+    display: flex;
+    flex-direction: column;
 
-    h3 {
-      color: var(--secondary-azul); /* Título posterior en Azul Eléctrico */
-      font-weight: 700;
-      margin-bottom: 12px;
+    .back-top-content {
+      display: flex;
+      flex-direction: column;
+      height: calc(100% - 50px); /* Deja espacio exacto abajo para el botón 'Más información' */
+      overflow: hidden;
     }
 
-    p {
-      color: var(--dark-text);
-      line-height: 1.5;
-      font-size: 0.95rem;
-      margin: 0 0 20px 0;
-    }
+    .back-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
 
-    /* Botón de acción con Feedback dinámico de la paleta */
-    .btn-action {
-      padding: 10px 25px;
-      background-color: var(--secondary-azul); /* Nace Azul Eléctrico */
-      color: white;
-      border: none;
-      border-radius: 25px;
-      font-weight: bold;
-      font-size: 0.9rem;
-      box-shadow: 0 4px 10px rgba(0, 75, 255, 0.15);
-      transition: all 0.3s ease;
-
-      &:hover {
-        background-color: var(--primary-rojo); /* Transiciona a Rojo Esperanza en hover */
-        box-shadow: 0 4px 12px rgba(255, 130, 0, 0.25);
-        transform: translateY(-1px);
+      h3 {
+        color: #0B2545;
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin: 0;
       }
       
-      &:active {
-        transform: translateY(1px);
+      .btn-close-flip {
+        background: none;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+        color: #94A3B8;
+      }
+    }
+
+    .pet-details-badge-grid {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+      
+      .detail-pill {
+        background-color: #F1F5F9;
+        color: #475569;
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 6px;
+        border: 1px solid #E2E8F0;
+      }
+    }
+
+    /* Contenedor scroller de la info para que NADA empuje la tarjeta hacia abajo */
+    .form-data-body-scroller {
+      flex-grow: 1;
+      overflow-y: auto;
+      margin-bottom: 6px;
+      padding-right: 4px;
+
+      .pet-description {
+        color: #334155;
+        font-size: 0.82rem;
+        line-height: 1.4;
+        margin-bottom: 8px;
+        text-align: left;
+      }
+
+      .data-section {
+        background: #FAFBFD;
+        border: 1px solid #E6EDF8;
+        border-radius: 8px;
+        padding: 6px;
+        text-align: left;
+
+        .section-label {
+          display: block;
+          font-size: 0.65rem;
+          font-weight: 700;
+          color: #004BFF;
+          text-transform: uppercase;
+          margin-bottom: 2px;
+        }
+
+        .section-text {
+          font-size: 0.78rem;
+          color: #334155;
+          margin: 0;
+        }
+      }
+    }
+
+    /* Sección de comentarios adaptada para el área restringida */
+    .comments-section {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 8px;
+      height: 42px; 
+      overflow: hidden;
+      transition: height 0.25s ease;
+      box-sizing: border-box;
+
+      &.expanded {
+        height: 140px; /* Evita que crezca infinitamente rompiendo el layout */
+      }
+
+      .comments-toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+
+        .comments-title { font-size: 0.68rem; font-weight: 700; color: #64748B; }
+        .toggle-indicator { font-size: 0.68rem; color: #004BFF; font-weight: 600; }
+      }
+
+      .comments-scroll {
+        flex-grow: 1;
+        overflow-y: auto;
+        margin-top: 4px;
+      }
+
+      .social-comment {
+        font-size: 0.75rem;
+        text-align: left;
+        margin-bottom: 4px;
+        .social-author { font-weight: 700; color: #0F172A; }
+        .social-text { color: #475569; }
+      }
+    }
+
+    .back-footer-actions {
+      width: 100%;
+      margin-top: auto;
+
+      .btn-split-layout {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+      }
+
+      .btn-action, .btn-return {
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+        width: 100%;
+      }
+
+      .btn-action {
+        background-color: #004BFF;
+        color: white;
+        &:hover { background-color: #FF8200; }
       }
     }
   }
+}
+
+/* Scrollbars unificados */
+.form-data-body-scroller::-webkit-scrollbar,
+.comments-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.form-data-body-scroller::-webkit-scrollbar-thumb,
+.comments-scroll::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
 }

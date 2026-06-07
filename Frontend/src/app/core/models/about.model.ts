@@ -7,4 +7,5 @@ export interface About {
   titulo: string;
   descripcion: string;
   icono: string; // Clase de FontAwesome o Bootstrap Icons
+  imagenUrl?: string; // URL de la imagen asociada al valor estratégico
 }

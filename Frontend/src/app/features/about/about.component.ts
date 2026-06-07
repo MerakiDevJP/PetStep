@@ -12,15 +12,10 @@ import { About } from '../../core/models/about.model';
 export class AboutComponent {
 
   public valorSeleccionadoId = signal<string | null>(null);
-  
-  // Signal reactivo para controlar el renderizado de la imagen en el DOM asíncrono
-  public imagenActualUrl = signal<string | null>(null);
 
-  // Registro indexado e inmutable para las imágenes institucionales
-  private readonly imagenesEstrategicas: { [key: string]: string } = {
-    mision: 'assets/images/mision-petstep.png', 
-    vision: 'assets/images/vision-petstep.png'
-  };
+  // Rutas explícitas inmutables para las caras frontales de Misión y Visión
+  public readonly imgMision = 'assets/images/mision-petstep.png';
+  public readonly imgVision = 'assets/images/vision-petstep.png';
 
   public readonly mision = signal<string>(
     'Automatizar y optimizar los procesos de adopción y monitoreo post-adopción de fauna urbana mediante una plataforma web robusta e intuitiva basada en el stack MEAN. El sistema garantiza la trazabilidad absoluta de cada mascota a través de flujos de estado estrictos y arquitecturas reactivas, mitigando la fragmentación de la información y promoviendo el bienestar animal.'
@@ -35,41 +30,26 @@ export class AboutComponent {
       id: 'v1',
       titulo: 'Integridad y Rigor Técnico',
       descripcion: 'Se prioriza la excelencia en la ingeniería de software mediante la aplicación estricta de principios SOLID y patrones de diseño.',
-      icono: 'bi-code-slash'
+      icono: 'bi-code-slash',
+      imagenUrl: 'assets/images/integridad.png' // 🚀 Ruta de imagen
     },
     {
       id: 'v2',
       titulo: 'Innovación Centrada en el Usuario',
       descripcion: 'La implementación de interfaces dinámicas busca ofrecer una experiencia de usuario óptima que potencie las tasas de adopción.',
-      icono: 'bi-cpu'
+      icono: 'bi-cpu',
+      imagenUrl: 'assets/images/innovacion.png' // 🚀 Ruta de imagen
     },
     {
       id: 'v3',
       titulo: 'Responsabilidad Social',
       descripcion: 'Compromiso ético con la entrega de un sistema eficiente que optimice los recursos digitales del refugio y asegure el bienestar animal.',
-      icono: 'bi-heart-pulse'
+      icono: 'bi-heart-pulse',
+      imagenUrl: 'assets/images/responsabilidad.png' // 🚀 Ruta de imagen
     }
   ]);
 
-  /**
-   * CÓDIGO DEL EVENTO: Asigna de forma reactiva la URL según la sección activa.
-   */
-  public onMostrarImagen(seccion: 'mision' | 'vision'): void {
-    this.imagenActualUrl.set(this.imagenesEstrategicas[seccion]);
-  }
-
-  /**
-   * CÓDIGO DEL EVENTO: Remueve la URL del estado destruyendo el nodo del DOM.
-   */
-  public onOcultarImagen(): void {
-    this.imagenActualUrl.set(null);
-  }
-
   public onSeleccionarValor(id: string): void {
-    if (this.valorSeleccionadoId() === id) {
-      this.valorSeleccionadoId.set(null);
-    } else {
-      this.valorSeleccionadoId.set(id);
-    }
+    this.valorSeleccionadoId.update(actual => actual === id ? null : id);
   }
 }

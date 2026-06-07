@@ -7,28 +7,52 @@
 
     <ul class="nav-menu">
       <li>
-        <a routerLink="/mascotas" routerLinkActive="active-link" class="nav-item">
-          <span class="nav-icon">🐾</span>
-          <span class="nav-text">Mascotas</span>
-        </a>
-      </li>
-      <li>
         <a routerLink="/conocenos" routerLinkActive="active-link" class="nav-item">
           <span class="nav-icon">✨</span>
           <span class="nav-text">Conócenos</span>
         </a>
       </li>
+      
       <li>
-        <a routerLink="/adoption" routerLinkActive="active-link" class="nav-item">
-          <span class="nav-icon">🏠</span>
-          <span class="nav-text">Adopciones</span>
+        <a routerLink="/mascotas" routerLinkActive="active-link" class="nav-item">
+          <span class="nav-icon">🐾</span>
+          <span class="nav-text">Mascotas</span>
         </a>
       </li>
+      
+      <li>
+        <a routerLink="/adoption" routerLinkActive="active-link" class="nav-item">
+          <span class="nav-icon">📝</span>
+          <span class="nav-text">Formularios</span>
+        </a>
+      </li>
+
+      @if (isLoggedIn) {
+        <li class="nav-item-dropdown">
+          <a routerLink="/plataforma" routerLinkActive="active-link" class="nav-item">
+            <span class="nav-icon">💻</span>
+            <span class="nav-text">Plataforma</span>
+          </a>
+          <ul class="dropdown-submenu">
+            <li>
+              <a routerLink="/trazabilidad" routerLinkActive="active-sub-link">
+                📍 Trazabilidad
+              </a>
+            </li>
+            <li>
+              <a routerLink="/edu-responsable" routerLinkActive="active-sub-link">
+                📋 Pasos de Adopción
+              </a>
+            </li>
+          </ul>
+        </li>
+      }
     </ul>
 
     <div class="nav-actions">
-      <button class="btn-nav-login">
-        <span>🔑</span> Iniciar Sesión
+      <button class="btn-nav-login" (click)="toggleLogin()">
+        <span>{{ isLoggedIn ? '🚪' : '🔑' }}</span> 
+        {{ isLoggedIn ? 'Cerrar Sesión' : 'Iniciar Sesión' }}
       </button>
     </div>
 

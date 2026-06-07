@@ -9,9 +9,39 @@
   background-color: var(--bg-crema); 
   color: var(--dark-text);
 }
+/* Reseteo básico de la página (El scroll global de la pantalla SIGUE ACTIVO) */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #FDF8F5; /* El color crema base de PetStep */
+}
 
+/* HACER EL NAVBAR ESTÁTICO */
+app-navbar {
+  display: block;
+  position: fixed; /* Lo despega del flujo y lo congela en la pantalla */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Asegura que siempre quede por encima de las fotos de las mascotas */
+}
+
+/* El contenedor del contenido dinámico */
 .main-content-layout {
-  flex: 1;
+  padding: 20px;
+  
+  /* ⚠️ IMPORTANTE: Este margen superior debe ser igual o ligeramente mayor 
+     a la altura que tenga tu Navbar para que no tape el inicio de tus vistas */
+  margin-top: 70px; 
+  
+  display: block;
   width: 100%;
   box-sizing: border-box;
+}
+
+/* El footer se mantiene al final del flujo y se moverá normalmente con el scroll */
+app-footer {
+  display: block;
+  width: 100%;
 }

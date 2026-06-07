@@ -56,8 +56,15 @@
 
   <!-- 3. Sección: Perdidos -->
   <div class="category-section">
-    <h3 class="section-label lost">🆘 Perdidos (Ayúdanos a encontrarlos)</h3>
-    <div class="gallery-grid">
+    <div class="gallery-section-header lost-border">
+      <h3 class="section-label-clean lost-color">🆘 Perdidos (Ayúdanos a encontrarlos)</h3>
+      
+      <button class="btn-reporte-global" (click)="irAReportePerdida()">
+        🚨 Crear Reporte
+      </button>
+    </div>
+    
+    <div class="gallery-grid mt-3">
       @for (item of perdidos(); track item.id) {
         <app-pet-card [pet]="item"></app-pet-card>
       } @empty { 

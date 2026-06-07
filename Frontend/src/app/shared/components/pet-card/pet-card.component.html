@@ -2,19 +2,106 @@
   <div class="card-inner" [class.flipped]="isFlipped">
     
     <div class="card-front">
-      <span class="status-badge" [style.background-color]="statusColor">
-        {{ pet.estado }}
-      </span>
-      <img [src]="pet.fotoUrl" [alt]="pet.nombre" class="pet-img">
-      <h2>{{ pet.nombre }}</h2>
-      <p>{{ pet.especie }}</p>
+      <div class="img-container-high">
+        <span class="status-badge" [style.background-color]="getStatusColor(pet.estado)">
+          {{ pet.estado }}
+        </span>
+        <img [src]="pet.fotoUrl" [alt]="pet.nombre" class="pet-img">
+      </div>
+      <div class="info-front-compact">
+        <h2>{{ pet.nombre }}</h2>
+        <span class="small-species">{{ pet.especie }}</span>
+      </div>
     </div>
 
-    <div class="card-back">
-      <h3>Conoce a {{ pet.nombre }}</h3>
-      <p>Nuestra mascota se encuentra en estado {{ pet.estado }}. Ayúdanos a encontrarle un hogar permanente.</p>
-      <button class="btn-action">Más información</button>
-    </div>
+    <div class="card-back" (click)="$event.stopPropagation()">
+      
+      <div class="back-top-content">
+        <div class="back-header">
+          <div class="title-area">
+            <h3>Conoce a {{ pet.nombre }}</h3>
+          </div>
+          <button class="btn-close-flip" title="Volver al frente" (click)="onFlip(); $event.stopPropagation()">✕</button>
+        </div>
 
+        <div class="pet-details-badge-grid">
+          <span class="detail-pill"><i class="bi bi-tag-fill"></i> {{ pet.especie }}</span>
+          <span class="detail-pill"><i class="bi bi-calendar-event"></i> {{ pet.edad || 'Edad no reg.' }}</span>
+          <span class="detail-pill"><i class="bi bi-heart-fill"></i> {{ pet.estado.toLowerCase() }}</span>
+        </div>
+
+        <p class="pet-description">
+          @if (pet.estado === 'DISPONIBLE') {
+            Es una alma noble llena de amor incondicional esperando abrir las puertas de un nuevo hogar. ¡Tu casa podría ser su destino final!
+          } @else if (pet.estado === 'PERDIDO') {
+            Su familia lo extraña profundamente y cada segundo cuenta. Si tienes pistas sobre su paradero, tu reporte puede salvar una vida.
+          } @else if (pet.estado === 'EN_PROCESO') {
+            ¡Grandes noticias! Actualmente se encuentra en su camino de vinculación hacia una adopción responsable.
+          } @else {
+            Una historia con final feliz. Esta mascota ya se encuentra disfrutando de la calidez y el cuidado de una familia protectora.
+          }
+        </p>
+      </div>
+
+      <div class="comments-section" [class.expanded]="comentariosExpandidos">
+        <div class="comments-toggle" (click)="toggleComentarios(); $event.stopPropagation()">
+          <span class="comments-title">Comunidad ({{ pet.comentarios?.length || 0 }})</span>
+          <span class="toggle-indicator">{{ comentariosExpandidos ? 'Ocultar ▲' : 'Ver todos ▼' }}</span>
+        </div>
+        
+        @if (comentariosExpandidos) {
+          <div class="comments-scroll custom-scrollbar">
+            @if (pet.comentarios && pet.comentarios.length > 0) {
+              @for (comentario of pet.comentarios; track $index) {
+                <div class="social-comment">
+                  <span class="social-author">{{ comentario.autor }}</span>
+                  <span class="social-text">{{ comentario.texto }}</span>
+                </div>
+              }
+            } @else {
+              <div class="empty-comments">No hay comentarios aún. ¡Sé el primero en dejar uno!</div>
+            }
+          </div>
+        }
+
+        <div class="input-group input-group-sm input-social">
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Añadir al hilo de conversación..."
+            [ngModel]="nuevoComentario()"
+            (ngModelChange)="nuevoComentario.set($event)"
+            (keyup.enter)="agregarComentario()"
+            (click)="$event.stopPropagation()"
+          />
+          <button 
+            class="btn btn-dark" 
+            type="button" 
+            (click)="agregarComentario(); $event.stopPropagation()"
+            [disabled]="!nuevoComentario().trim()"
+          >
+            Enviar
+          </button>
+        </div>
+      </div>
+
+      <div class="back-footer-actions">
+        @if (pet.estado === 'DISPONIBLE') {
+          <div class="btn-split-layout">
+            <button class="btn-action shadow-sm" (click)="irAAdopciones(); $event.stopPropagation()">
+              Más información
+            </button>
+            <button class="btn-return" (click)="onFlip(); $event.stopPropagation()">
+              Volver al frente
+            </button>
+          </div>
+        } @else {
+          <button class="btn-return w-100" (click)="onFlip(); $event.stopPropagation()">
+            Volver al frente
+          </button>
+        }
+      </div>
+
+    </div>
   </div>
 </div>

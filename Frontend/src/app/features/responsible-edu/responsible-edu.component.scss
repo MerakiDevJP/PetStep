@@ -1,0 +1,106 @@
+.edu-container {
+  padding: 2rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  .edu-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+
+    h1 {
+      color: var(--secondary-azul);
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      color: var(--dark-text);
+      font-size: 1.1rem;
+      font-style: italic;
+      opacity: 0.85;
+    }
+  }
+
+  .divider {
+    border: 0;
+    height: 3px;
+    background: linear-gradient(to right, transparent, var(--secondary-azul), var(--support-verde), transparent);
+    margin-bottom: 3rem;
+  }
+}
+
+/* Grid de Artículos Educativos */
+.grid-educativo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+  margin-bottom: 4rem;
+}
+
+.edu-card {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(11, 37, 69, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 2px solid transparent;
+  border-right: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+
+  /* Bordes Superiores Temáticos */
+  &.orange-top { border-top: 5px solid var(--interactive-naranja, #F27022); .edu-icon { color: var(--interactive-naranja, #F27022); }}
+  &.blue-top { border-top: 5px solid var(--secondary-azul); .edu-icon { color: var(--secondary-azul); }}
+  &.green-top { border-top: 5px solid var(--support-verde); .edu-icon { color: var(--support-verde); }}
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(11, 37, 69, 0.08);
+  }
+
+  .edu-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    color: var(--dark-text);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0 0 0.8rem 0;
+  }
+
+  p {
+    color: var(--dark-text);
+    opacity: 0.8;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+/* Bloque Destacado Inferior */
+.call-to-action-box {
+  background-color: #FFF3CD; /* Fondo de advertencia suave */
+  border-left: 5px solid #FFC107;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+
+  h2 {
+    color: #856404;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  p {
+    color: #856404;
+    margin: 0;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+}

@@ -1,0 +1,110 @@
+.trace-container {
+  padding: 2rem 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  .trace-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+
+    h1 {
+      color: var(--secondary-azul);
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      color: var(--dark-text);
+      font-size: 1.1rem;
+      font-style: italic;
+      opacity: 0.85;
+    }
+  }
+
+  .divider {
+    border: 0;
+    height: 3px;
+    background: linear-gradient(to right, transparent, var(--interactive-naranja, #F27022), var(--secondary-azul), transparent);
+    margin-bottom: 4rem;
+  }
+}
+
+/* Sistema de Línea de Tiempo Vertical */
+.timeline-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding-left: 2rem;
+
+  /* Línea conectora central de fondo */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 40px;
+    top: 10px;
+    bottom: 10px;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--interactive-naranja, #F27022), var(--secondary-azul), var(--support-verde));
+    border-radius: 2px;
+  }
+}
+
+.timeline-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+
+  .step-icon-box {
+    width: 44px;
+    height: 44px;
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    box-shadow: 0 4px 12px rgba(11, 37, 69, 0.1);
+    flex-shrink: 0;
+    border-top: 4px solid transparent;
+
+    /* Sincronización de detalles de color de la marca */
+    &.orange-detail { border-top-color: var(--interactive-naranja, #F27022); color: var(--interactive-naranja, #F27022); }
+    &.blue-detail { border-top-color: var(--secondary-azul); color: var(--secondary-azul); }
+    &.green-detail { border-top-color: var(--support-verde); color: var(--support-verde); }
+    &.dark-detail { border-top-color: var(--dark-text); color: var(--dark-text); }
+  }
+
+  .step-content {
+    background-color: #FFFFFF;
+    padding: 1.5rem;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(11, 37, 69, 0.04);
+    flex-grow: 1;
+
+    h3 {
+      color: var(--dark-text);
+      margin: 0 0 0.5rem 0;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    p {
+      color: var(--dark-text);
+      opacity: 0.8;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .timeline-wrapper::before { left: 20px; }
+  .timeline-step {
+    gap: 1rem;
+    .step-icon-box { width: 36px; height: 36px; font-size: 1.1rem; }
+  }
+}

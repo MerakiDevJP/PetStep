@@ -73,6 +73,36 @@
 .category-section {
   margin-bottom: 4rem;
 
+  /* Contenedor maestro de cabecera en eje horizontal */
+  .gallery-section-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100%;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid rgba(11, 37, 69, 0.08);
+
+    /* Borde reactivo exclusivo para la sección de extraviados */
+    &.lost-border {
+      border-bottom-color: var(--texture-salmon, #ef4444);
+    }
+  }
+
+  /* Estilo base para títulos planos sin bordes duplicados */
+  .section-label-clean {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+
+    &.lost-color {
+      color: var(--texture-salmon, #ef4444);
+    }
+  }
+
+  /* Label estándar para el resto de categorías */
   .section-label {
     font-size: 1.4rem;
     font-weight: 700;
@@ -82,29 +112,51 @@
     display: flex;
     align-items: center;
 
-    /* Bordes de color personalizados según el estado del flujo */
     &.adoption { color: var(--dark-text); border-bottom-color: var(--secondary-azul); }
     &.processing { color: var(--primary-naranja); border-bottom-color: var(--primary-naranja); }
     &.adopted { color: var(--support-verde); border-bottom-color: var(--support-verde); }
-    &.lost { color: var(--texture-salmon); border-bottom-color: var(--texture-salmon); }
     &.recovered { color: var(--accent-amarillo); border-bottom-color: var(--accent-amarillo); }
+  }
+
+  /* Botón de reporte global con UI/UX de alta visibilidad */
+  .btn-reporte-global {
+    background-color: #dc3545; /* Color rojo de alerta estándar UI */
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.6rem 1.4rem;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(220, 53, 69, 0.15);
+    transition: all 0.2s ease-in-out;
+    white-space: nowrap; /* Evita que el texto se rompa en pantallas pequeñas */
+
+    &:hover {
+      background-color: #bd2130;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(220, 53, 69, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
 }
 
 .gallery-grid {
   display: grid;
-  // repeat(auto-fit, minmax(280px, 1fr)) obliga a las tarjetas a ponerse una al lado
-  // de la otra mientras quepan en la pantalla. Si no caben, bajan a la siguiente fila.
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem; /* Espaciado simétrico entre tarjetas */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
   width: 100%;
+  align-items: stretch; /* Asegura que las tarjetas llenen el espacio vertical */
 }
 
 .empty-text {
   color: var(--dark-text);
   font-style: italic;
   opacity: 0.7;
-  grid-column: 1 / -1; /* Hace que el mensaje abarque toda la fila si está vacío */
+  grid-column: 1 / -1;
   text-align: center;
   padding: 2rem 0;
 }

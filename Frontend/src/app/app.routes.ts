@@ -31,11 +31,22 @@ export const routes: Routes = [
       import(
         './features/adoption/pages/adoption-request/adoption-request'
       )
-      .then(
-        m => m.AdoptionRequest
-      )
+      .then(m => m.AdoptionRequest)
   },
 
+  {
+      path: 'trazabilidad',
+      loadComponent: () =>
+        import('./features/traceability/traceability.component')
+        .then(m => m.TraceabilityComponent)
+  },
+
+  {
+      path: 'edu-responsable',
+      loadComponent: () =>
+        import('./features/responsible-edu/responsible-edu.component')
+        .then(m => m.ResponsibleEduComponent)
+  },
   {
     path: '**',
     redirectTo: 'mascotas'

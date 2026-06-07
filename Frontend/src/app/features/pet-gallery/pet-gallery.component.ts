@@ -1,5 +1,6 @@
 import { Component, inject, computed, signal, OnInit } from '@angular/core'; // Se añade 'signal'
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router'; 
 import { PetCardComponent } from '../../shared/components/pet-card/pet-card.component';
 import { PetService } from '../../core/services/pet.service';
 import { PetStatus } from '../../core/models/pet.model';
@@ -13,6 +14,8 @@ import { PetStatus } from '../../core/models/pet.model';
 })
 export class PetGalleryComponent implements OnInit {
   private readonly _petService = inject(PetService);
+  private readonly _router = inject(Router);
+  
   /**
    * Ciclo de vida inicial: Manda a llamar a las mascotas del backend
    */
@@ -49,6 +52,15 @@ export class PetGalleryComponent implements OnInit {
     this._filtrarMascotasPorEspecie(PetStatus.RECONECTADO)
   );
 
+  /**
+   * Método encargado de gestionar la redirección al formulario global de reportes.
+   * Vinculado directamente al evento (click) del botón en la sección de Perdidos.
+   */
+  public irAReportePerdida(): void {
+    // Ajusta la ruta '/reportar-perdida' según cómo la tengas declarada en tu app.routes.ts
+    this._router.navigate(['/reportar-perdida']); 
+  }
+  
   /**
    * Captura el valor del input de búsqueda al presionar la tecla Enter.
    * Se realiza la limpieza de espacios y estandarización a minúsculas.
