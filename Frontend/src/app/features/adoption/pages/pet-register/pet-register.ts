@@ -8,7 +8,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { PetService } from '../../../../core/services/pet';
+import { PetService } from '../../../../core/services/pet.service'; // Asegúrate de que la extensión y ruta sean las correctas
 
 @Component({
   selector: 'app-pet-register',
@@ -26,7 +26,8 @@ export class PetRegister {
   especieOptions = ['Perro', 'Gato', 'Conejo', 'Ave', 'Otro'];
   estadoOptions = ['DISPONIBLE', 'RECONECTADO', 'EN_PROCESO', 'RESERVADO'];
 
-  constructor(private fb: FormBuilder) {
+  // CORRECCIÓN 1: Inyectar correctamente "private petService: PetService"
+  constructor(private fb: FormBuilder, private petService: PetService) {
     this.petForm = this.fb.group({
       nombre:        ['', [Validators.required, Validators.minLength(2)]],
       especie:       ['', Validators.required],
@@ -75,6 +76,7 @@ export class PetRegister {
     return 'Campo inválido.';
   }
 
+  // CORRECCIÓN 2: Conectar el método con la API real mediante HTTP
   submitForm() {
     this.submitted = true;
     this.petForm.markAllAsTouched();
@@ -82,21 +84,33 @@ export class PetRegister {
 
     const payload = {
       ...this.petForm.value,
-      comentarios: this.comentarios.controls.map((c, idx) => ({
-        _id: `temp_${Date.now()}_${idx}`,
+      comentarios: this.comentarios.controls.map((c) => ({
         autor: c.get('autor')?.value,
         texto: c.get('texto')?.value,
         fecha: new Date().toISOString()
       }))
     };
-    console.log('Nueva mascota:', payload);
 
-    this.submitSuccess = true;
-    setTimeout(() => {
-      this.submitSuccess = false;
-      this.submitted = false;
-      this.petForm.reset({ estado: 'DISPONIBLE' });
-      while (this.comentarios.length) this.comentarios.removeAt(0);
-    }, 4000);
+    console.log('Enviando datos reales al Backend...', payload);
+
+    // Llamada HTTP real hacia tu base de datos MongoDB
+    this.petService.registrarMascota(payload).subscribe({
+      next: (response: any) => {
+        console.log('¡Guardado exitoso en MongoDB!', response);
+        this.submitSuccess = true;
+        
+        // Animación de limpieza del formulario
+        setTimeout(() => {
+          this.submitSuccess = false;
+          this.submitted = false;
+          this.petForm.reset({ estado: 'DISPONIBLE' });
+          while (this.comentarios.length) this.comentarios.removeAt(0);
+        }, 4000);
+      },
+      error: (err: any) => {
+        console.error('Error al conectar con la API de MongoDB:', err);
+        alert('Hubo un error al registrar la mascota en el servidor.');
+      }
+    });
   }
 }

@@ -6,19 +6,11 @@ import { Pet, PetStatus } from '../models/pet.model';
 
 @Injectable({ providedIn: 'root' })
 export class PetService {
-  // Usamos el prefijo relativo gracias al proxy-config de Angular
-  private readonly API_URL = '/api/pets';
-
-  // El Signal arranca limpio (vacío) esperando los datos reales de MongoDB
+  private readonly API_URL ='http://localhost:3000/api/pets';
   private petsSignal = signal<Pet[]>([]);
   public pets = this.petsSignal.asReadonly();
-
-  // Inyección moderna de dependencias en Angular
   private http = inject(HttpClient);
 
-  /**
-   * Carga la lista completa de mascotas desde la base de datos distribuida
-   */
   public getAllPets(): void {
     this.http.get<Pet[]>(this.API_URL).subscribe({
       next: (data) => this.petsSignal.set(data),
@@ -26,9 +18,6 @@ export class PetService {
     });
   }
 
-  /**
-   * Modifica el estado de una mascota en MongoDB y actualiza reactivamente la interfaz
-   */
   public updatePetStatus(id: string, status: PetStatus): Observable<Pet> {
     return this.http.patch<Pet>(`${this.API_URL}/${id}/status`, { estado: status }).pipe(
       tap((updatedPet) => {
@@ -37,5 +26,9 @@ export class PetService {
         );
       })
     );
+  }
+
+  public registrarMascota(petData: any): Observable<any> {
+    return this.http.post<any>(this.API_URL, petData);
   }
 }

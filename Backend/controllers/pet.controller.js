@@ -10,8 +10,8 @@ const getPets = async (req, res) => {
 
         let filtro = {};
         if (especie) {
-            // Busqueda insensible a mayúsculas/minúsculas con Regex
-            filtro.species = { $regex: new RegExp(especie, 'i') };
+            // Busqueda insensible a mayúsculas/minúsculas con Regex apuntando al nuevo campo 'especie'
+            filtro.especie = { $regex: new RegExp(especie, 'i') };
         }
 
         const mascotas = await Pet.find(filtro);
@@ -36,17 +36,18 @@ const getPetById = async (req, res) => {
     }
 };
 
-// 3. POST: Registrar una nueva mascota
+// 3. POST: Registrar una nueva mascota con los campos en español y estructurados
 const createPet = async (req, res) => {
     try {
-        // Mapeo a los campos que recibe Express al Schema de Mongoose
         const nuevaMascota = new Pet({
-            name: req.body.nombre,
-            species: req.body.especie,
-            breed: req.body.raza,
-            age: req.body.edad,
-            description: req.body.descripcion,
-            status: req.body.estado || 'Disponible'
+            nombre: req.body.nombre,
+            especie: req.body.especie,
+            estado: req.body.estado || 'DISPONIBLE',
+            fotoUrl: req.body.fotoUrl,
+            historia: req.body.historia,
+            salud: req.body.salud,
+            temperamento: req.body.temperamento,
+            comentarios: req.body.comentarios || []
         });
 
         const mascotaGuardada = await nuevaMascota.save();
@@ -78,7 +79,7 @@ const createAdoption = async (req, res) => {
         const nuevaSolicitud = new AdoptionRequest({
             pet: mascotaId,
             applicantName: nombreAdoptante,
-            applicantAge: edadAdoptante || 18, // Fallback por seguridad
+            applicantAge: edadAdoptante || 18, 
             email: correo,
             phone: telefono || 'Sin teléfono',
             reasons: motivos || 'Sin motivos especificados'
@@ -86,8 +87,8 @@ const createAdoption = async (req, res) => {
 
         const solicitudGuardada = await nuevaSolicitud.save();
 
-        // Cambiar estado de la mascota de forma relacional
-        mascota.status = 'En Proceso';
+        // Cambiar el estado de la mascota de forma relacional con el nuevo Enum
+        mascota.estado = 'EN_PROCESO';
         await mascota.save();
 
         res.status(201).json({
@@ -111,12 +112,14 @@ const updatePetFull = async (req, res) => {
     try {
         const { id } = req.params;
         const datosActualizados = {
-            name: req.body.nombre,
-            species: req.body.especie,
-            breed: req.body.raza,
-            age: req.body.edad,
-            description: req.body.descripcion,
-            status: req.body.estado
+            nombre: req.body.nombre,
+            especie: req.body.especie,
+            estado: req.body.estado,
+            fotoUrl: req.body.fotoUrl,
+            historia: req.body.historia,
+            salud: req.body.salud,
+            temperamento: req.body.temperamento,
+            comentarios: req.body.comentarios
         };
 
         const mascotaActualizada = await Pet.findByIdAndUpdate(id, datosActualizados, { new: true, runValidators: true });
@@ -140,7 +143,8 @@ const updatePetStatus = async (req, res) => {
         const { id } = req.params;
         const { estado } = req.body; 
 
-        const mascotaActualizada = await Pet.findByIdAndUpdate(id, { status: estado }, { new: true, runValidators: true });
+        // Actualiza usando la propiedad 'estado' del nuevo esquema
+        const mascotaActualizada = await Pet.findByIdAndUpdate(id, { estado: estado }, { new: true, runValidators: true });
 
         if (!mascotaActualizada) {
             return res.status(404).json({ error: 'Not Found', message: 'Mascota no encontrada' });
