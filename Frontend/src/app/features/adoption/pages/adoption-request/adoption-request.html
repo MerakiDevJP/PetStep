@@ -4,7 +4,6 @@
 
   <div class="forms-layout">
 
-    <!-- ── IZQUIERDA: Formulario de Adopción ── -->
     <div class="form-card">
 
       <div class="form-card__header">
@@ -107,6 +106,13 @@
           <p class="field-error" *ngIf="isInvalid('petName')" role="alert"><span class="error-dot">●</span> {{ getError('petName') }}</p>
         </div>
 
+        <div *ngIf="!isAdoption" class="field-group" [class.field-group--ok]="isValid('fotoUrl')">
+          <label class="field-label" for="fotoUrl">Enlace/URL de la foto de la mascota</label>
+          <div class="field-input-wrap">
+            <input id="fotoUrl" type="text" class="field-input" formControlName="fotoUrl" placeholder="https://ejemplo.com/foto.jpg" />
+          </div>
+        </div>
+
         <div class="field-group" [class.field-group--error]="isInvalid('petDescription')" [class.field-group--ok]="isValid('petDescription')">
           <label class="field-label" for="petDescription">
             {{ isAdoption ? 'Descripción / por qué quieres adoptar' : 'Descripción de la mascota perdida' }}
@@ -144,7 +150,6 @@
       </form>
     </div>
 
-    <!-- ── DERECHA: Formulario de Registro de Mascota ── -->
     <app-pet-register></app-pet-register>
 
   </div>

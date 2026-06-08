@@ -1,11 +1,9 @@
 <section class="gallery-container">
-  <!-- Encabezado Principal -->
   <div class="gallery-header">
     <h2 class="gallery-title">Explora nuestra comunidad</h2>
     <p class="gallery-subtitle">Mascotas organizadas por su estado actual en el proceso.</p>
   </div>
 
-  <!-- Zona de Búsqueda de Alta Jerarquía Visual -->
   <div class="search-section">
     <div class="search-box">
       <span class="search-icon">🔍</span>
@@ -18,11 +16,10 @@
     </div>
   </div>
 
-  <!-- 1. Sección: En Adopción -->
   <div class="category-section">
     <h3 class="section-label adoption">🏠 En Adopción</h3>
     <div class="gallery-grid">
-      @for (item of enAdopcion(); track item.id) {
+      @for (item of enAdopcion(); track $index) {
         <app-pet-card [pet]="item"></app-pet-card>
       } @empty { 
         <p class="empty-text">No hay mascotas disponibles o que coincidan con la búsqueda.</p> 
@@ -30,11 +27,10 @@
     </div>
   </div>
 
-  <!-- 2. Sección: En Proceso de Adopción -->
-   <div class="category-section">
+  <div class="category-section">
     <h3 class="section-label processing">⏳ En Proceso de Adopción</h3>
     <div class="gallery-grid">
-      @for (item of enProceso(); track item.id) {
+      @for (item of enProceso(); track $index) {
         <app-pet-card [pet]="item"></app-pet-card>
       } @empty { 
         <p class="empty-text">No hay solicitudes de adopción en trámite o coincidentes.</p> 
@@ -42,11 +38,10 @@
     </div>
   </div>
   
-  <!-- 3.  Sección: Adoptados -->
   <div class="category-section">
     <h3 class="section-label adopted">🎉 Final feliz (Adoptados)</h3>
     <div class="gallery-grid">
-      @for (item of adoptados(); track item.id) {
+      @for (item of adoptados(); track $index) {
         <app-pet-card [pet]="item"></app-pet-card>
       } @empty { 
         <p class="empty-text">No se registran historias de éxito para esta especie en este momento.</p> 
@@ -54,7 +49,6 @@
     </div>
   </div>
 
-  <!-- 3. Sección: Perdidos -->
   <div class="category-section">
     <div class="gallery-section-header lost-border">
       <h3 class="section-label-clean lost-color">🆘 Perdidos (Ayúdanos a encontrarlos)</h3>
@@ -65,7 +59,7 @@
     </div>
     
     <div class="gallery-grid mt-3">
-      @for (item of perdidos(); track item.id) {
+      @for (item of perdidos(); track $index) {
         <app-pet-card [pet]="item"></app-pet-card>
       } @empty { 
         <p class="empty-text">¡Buenas noticias! No hay reportes activos para esta categoría.</p> 
@@ -73,11 +67,10 @@
     </div>
   </div>
 
-  <!-- 4. Sección: Recuperados -->
   <div class="category-section">
     <h3 class="section-label recovered">✨ Recuperados</h3>
     <div class="gallery-grid">
-      @for (item of recuperados(); track item.id) {
+      @for (item of recuperados(); track $index) {
         <app-pet-card [pet]="item"></app-pet-card>
       } @empty { 
         <p class="empty-text">No se registran reportes de reconexión coincidentes.</p> 

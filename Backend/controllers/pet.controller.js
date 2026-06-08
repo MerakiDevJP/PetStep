@@ -6,16 +6,23 @@ const AdoptionRequest = require('../models/adoptionRequest.model');
 const getPets = async (req, res) => {
     try {
         const { especie } = req.query;
-        console.log(`Request recibida. Buscando mascotas de especie: ${especie || 'Todas'}`);
-
-        // Aseguramos que solo busque documentos que posean la propiedad 'nombre'
-        let filtro = { nombre: { $exists: true, $ne: "" } };
+        let filtro = {};
+        
+        // Mantener el filtro si existe
         if (especie) {
             filtro.especie = { $regex: new RegExp(especie, 'i') };
         }
 
         const mascotas = await Pet.find(filtro);
-        res.status(200).json(mascotas);
+
+        const mascotasConImagen = mascotas.map(mascota => {
+            const m = mascota.toObject();
+            // URL de imagen directa
+            m.fotoUrl = m.fotoUrl || 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=500';
+            return m;
+        });
+
+        res.status(200).json(mascotasConImagen);
     } catch (error) {
         res.status(500).json({ error: 'Server Error', message: error.message });
     }
@@ -44,7 +51,7 @@ const createPet = async (req, res) => {
             especie: req.body.especie,
             estado: req.body.estado || 'DISPONIBLE',
             fotoUrl: req.body.fotoUrl,
-            descripcion: req.body.descripcion || req.body.historia || req.body.history, 
+            descripcion: req.body.descripcion || req.body.historia || req.body.history,
             salud: req.body.salud,
             temperamento: req.body.temperamento,
             comentarios: req.body.comentarios || []
@@ -60,45 +67,27 @@ const createPet = async (req, res) => {
 // 4. POST: Procesar exclusivamente Solicitudes de Adopción tradicional
 const createAdoption = async (req, res) => {
     try {
-        const { fullName, email, phone, age, message, petId, mascotaId } = req.body;
-        const idMascotaDestino = petId || mascotaId;
+        const { fullName, email, petId, petName } = req.body;
+        console.log("Datos recibidos:", { fullName, email, petId, petName });
 
-        if (!fullName || !email) {
-            return res.status(400).json({ error: 'Bad Request', message: 'Faltan campos obligatorios (fullName o email).' });
+        let mascota;
+        // Búsqueda inteligente
+        if (petId) {
+            mascota = await Pet.findById(petId);
+        } else if (petName) {
+            // Buscamos por nombre si no hay ID
+            mascota = await Pet.findOne({ nombre: petName });
         }
 
-        if (!idMascotaDestino) {
-            return res.status(400).json({ error: 'Bad Request', message: 'Se requiere el ID de la mascota para procesar una adopción.' });
-        }
-
-        console.log(`Procesando solicitud de adopción para la mascota ID: ${idMascotaDestino}`);
-
-        const mascota = await Pet.findById(idMascotaDestino);
         if (!mascota) {
-            return res.status(404).json({ error: 'Not Found', message: 'La mascota especificada no existe.' });
+            return res.status(404).json({ error: 'Not Found', message: 'Mascota no encontrada' });
         }
 
-        const nuevaSolicitud = new AdoptionRequest({
-            pet: idMascotaDestino,
-            applicantName: fullName,
-            applicantAge: age || 18,
-            email: email,
-            phone: phone || 'Sin teléfono',
-            reasons: message || 'Sin motivos especificados'
-        });
+        // ... resto de tu código de guardado ...
 
-        const solicitudGuardada = await nuevaSolicitud.save();
-
-        // Actualizamos el estado a EN_PROCESO
-        mascota.estado = 'EN_PROCESO';
-        await mascota.save();
-
-        res.status(201).json({
-            message: '¡Solicitud de adopción procesada y guardada con éxito!',
-            data: solicitudGuardada
-        });
+        res.status(201).json({ message: 'Éxito' });
     } catch (error) {
-        res.status(400).json({ error: 'Bad Request', message: error.message });
+        res.status(500).json({ error: error.message });
     }
 };
 

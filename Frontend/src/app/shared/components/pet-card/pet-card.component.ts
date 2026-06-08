@@ -43,26 +43,26 @@ export class PetCardComponent implements OnInit {
    * Enrutamiento directo al módulo de adopciones (Corregido sin paréntesis)
    */
   public irAAdopciones(): void {
-    this.router.navigate(['/adoption'], { queryParams: { petId: this.pet.id } }); // 🚀 Corregido: this.pet.id
+    this.router.navigate(['/adoption'], { queryParams: { petId: this.pet.id } }); 
   }
 
   /**
    * Enrutamiento directo al módulo de reportes (Corregido sin paréntesis)
    */
   public irAReportePerdida(): void {
-    this.router.navigate(['/reportes/perdida'], { queryParams: { petId: this.pet.id } }); // 🚀 Corregido: this.pet.id
+    this.router.navigate(['/reportes/perdida'], { queryParams: { petId: this.pet.id } }); // 
   }
 
   /**
    * Asigna los colores hexadecimales según tus enums estrictos.
    */
-  public getStatusColor(estado: PetStatus): string {
+  public getStatusColor(estado: any): string {
     const colors: Record<string, string> = {
       [PetStatus.DISPONIBLE]: '#27AE60',  // Verde
       [PetStatus.EN_PROCESO]: '#F39C12',  // Naranja
       [PetStatus.ADOPTADO]: '#2980B9',    // Azul
-      [PetStatus.PERDIDO]: '#C0392B',     // Rojo
-      [PetStatus.RECONECTADO]: '#F1C40F'  // Amarillo
+      [PetStatus.EXTRAVIADO]: '#C0392B',     // Rojo
+      [PetStatus.HALLADO]: '#F1C40F'  // Amarillo
     };
     return colors[estado] || '#BDC3C7';   // Gris por defecto
   }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router'; // <-- NUEVA IMPORTACIÓN
 import { PetRegister } from '../pet-register/pet-register';
 import {
   FormBuilder,
@@ -8,6 +9,7 @@ import {
   Validators
 } from '@angular/forms';
 import { adultValidator } from '../../validators/adult.validator';
+import { PetService } from '../../../../core/services/pet.service';
 
 type FormMode = 'adoption' | 'lost';
 
@@ -22,8 +24,14 @@ export class AdoptionRequest implements OnInit {
   adoptionForm: FormGroup;
   submitted = false;
   submitSuccess = false;
+  private currentPetId: string | null = null; // <-- Variable para guardar el ID real
 
-  constructor(private fb: FormBuilder) {
+  // <-- Inyectamos ActivatedRoute en el constructor
+  constructor(
+    private fb: FormBuilder, 
+    private petService: PetService,
+    private route: ActivatedRoute 
+  ) {
     this.adoptionForm = this.fb.group({
       formMode: ['adoption', Validators.required],
       fullName: ['', [Validators.required, Validators.minLength(3)]],
@@ -33,11 +41,15 @@ export class AdoptionRequest implements OnInit {
       address: ['', [Validators.required, Validators.minLength(5)]],
       petName: ['', Validators.required],
       petDescription: ['', [Validators.required, Validators.minLength(20)]],
+      fotoUrl: [''], 
       message: ['']
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { 
+    // Captura el parámetro 'petId' directamente de la URL al inicializar el componente
+    this.currentPetId = this.route.snapshot.queryParamMap.get('petId');
+  }
 
   get f() {
     return this.adoptionForm.controls;
@@ -51,7 +63,6 @@ export class AdoptionRequest implements OnInit {
     return this.currentMode === 'adoption';
   }
 
-  /** Devuelve true si el campo fue tocado o el form fue enviado */
   isInvalid(field: string): boolean {
     const control = this.f[field];
     return !!(control && control.invalid && (control.dirty || control.touched || this.submitted));
@@ -86,13 +97,48 @@ export class AdoptionRequest implements OnInit {
 
     if (this.adoptionForm.invalid) return;
 
-    console.log('Formulario enviado:', this.adoptionForm.value);
-    this.submitSuccess = true;
+    const rawValues = this.adoptionForm.value;
 
-    setTimeout(() => {
-      this.submitSuccess = false;
-      this.submitted = false;
-      this.adoptionForm.reset({ formMode: 'adoption' });
-    }, 4000);
+    const payload = {
+      formMode: rawValues.formMode,
+      fullName: rawValues.fullName,
+      email: rawValues.email,
+      phone: rawValues.phone,
+      age: rawValues.age,
+      address: rawValues.address,
+      petName: rawValues.petName,
+      petDescription: rawValues.petDescription,
+      fotoUrl: rawValues.fotoUrl, 
+      message: rawValues.message,
+      petId: this.isAdoption ? this.currentPetId : null // <-- CORRECCIÓN: Envía el ID dinámico capturado
+    };
+
+    const endpoint = this.isAdoption 
+      ? 'http://localhost:3000/api/adoptions' 
+      : 'http://localhost:3000/api/lost-reports';
+
+    console.log(`Disparando petición hacia: ${endpoint}`, payload);
+
+    fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(async (res) => {
+        if (!res.ok) throw new Error('Error en el servidor');
+        const data = await res.json();
+        console.log('¡Transacción exitosa!', data);
+
+        this.submitSuccess = true;
+        setTimeout(() => {
+          this.submitSuccess = false;
+          this.submitted = false;
+          this.adoptionForm.reset({ formMode: 'adoption' });
+        }, 4000);
+      })
+      .catch((err) => {
+        console.error('Error al conectar con la API:', err);
+        alert('Hubo un error al procesar la solicitud en el servidor.');
+      });
   }
 }

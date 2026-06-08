@@ -1,6 +1,6 @@
 <div class="card-container" (click)="onFlip()">
   <div class="card-inner" [class.flipped]="isFlipped">
-    
+
     <div class="card-front">
       <div class="img-container-high">
         <span class="status-badge" [style.background-color]="getStatusColor(pet.estado)">
@@ -15,13 +15,14 @@
     </div>
 
     <div class="card-back" (click)="$event.stopPropagation()">
-      
+
       <div class="back-top-content">
         <div class="back-header">
           <div class="title-area">
             <h3>Conoce a {{ pet.nombre }}</h3>
           </div>
-          <button class="btn-close-flip" title="Volver al frente" (click)="onFlip(); $event.stopPropagation()">✕</button>
+          <button class="btn-close-flip" title="Volver al frente"
+            (click)="onFlip(); $event.stopPropagation()">✕</button>
         </div>
 
         <div class="pet-details-badge-grid">
@@ -31,14 +32,18 @@
         </div>
 
         <p class="pet-description">
-          @if (pet.estado === 'DISPONIBLE') {
-            Es una alma noble llena de amor incondicional esperando abrir las puertas de un nuevo hogar. ¡Tu casa podría ser su destino final!
-          } @else if (pet.estado === 'PERDIDO') {
-            Su familia lo extraña profundamente y cada segundo cuenta. Si tienes pistas sobre su paradero, tu reporte puede salvar una vida.
-          } @else if (pet.estado === 'EN_PROCESO') {
-            ¡Grandes noticias! Actualmente se encuentra en su camino de vinculación hacia una adopción responsable.
+          @if (pet.descripcion) {
+            {{ pet.descripcion }}
           } @else {
-            Una historia con final feliz. Esta mascota ya se encuentra disfrutando de la calidez y el cuidado de una familia protectora.
+            @if (pet.estado.toString().toUpperCase() === 'DISPONIBLE') {
+              Es una alma noble llena de amor incondicional esperando abrir las puertas de un nuevo hogar. ¡Tu casa podría ser su destino final!
+            } @else if (pet.estado.toString().toUpperCase() === 'EXTRAVIADO' || pet.estado.toString().toUpperCase() === 'PERDIDO') {
+              Su familia lo extraña profundamente y cada segundo cuenta. Si tienes pistas sobre su paradero, tu reporte puede salvar una vida.
+            } @else if (pet.estado.toString().toUpperCase() === 'EN_PROCESO') {
+              ¡Grandes noticias! Actualmente se encuentra en su camino de vinculación hacia una adopción responsable.
+            } @else {
+              Una historia con final feliz. Esta mascota ya se encuentra disfrutando de la calidez y el cuidado de una familia protectora.
+            }
           }
         </p>
       </div>
@@ -48,7 +53,7 @@
           <span class="comments-title">Comunidad ({{ pet.comentarios?.length || 0 }})</span>
           <span class="toggle-indicator">{{ comentariosExpandidos ? 'Ocultar ▲' : 'Ver todos ▼' }}</span>
         </div>
-        
+
         @if (comentariosExpandidos) {
           <div class="comments-scroll custom-scrollbar">
             @if (pet.comentarios && pet.comentarios.length > 0) {
@@ -65,28 +70,18 @@
         }
 
         <div class="input-group input-group-sm input-social">
-          <input 
-            type="text" 
-            class="form-control" 
-            placeholder="Añadir al hilo de conversación..."
-            [ngModel]="nuevoComentario()"
-            (ngModelChange)="nuevoComentario.set($event)"
-            (keyup.enter)="agregarComentario()"
-            (click)="$event.stopPropagation()"
-          />
-          <button 
-            class="btn btn-dark" 
-            type="button" 
-            (click)="agregarComentario(); $event.stopPropagation()"
-            [disabled]="!nuevoComentario().trim()"
-          >
+          <input type="text" class="form-control" placeholder="Añadir al hilo de conversación..."
+            [ngModel]="nuevoComentario()" (ngModelChange)="nuevoComentario.set($event)"
+            (keyup.enter)="agregarComentario()" (click)="$event.stopPropagation()" />
+          <button class="btn btn-dark" type="button" (click)="agregarComentario(); $event.stopPropagation()"
+            [disabled]="!nuevoComentario().trim()">
             Enviar
           </button>
         </div>
       </div>
 
       <div class="back-footer-actions">
-        @if (pet.estado === 'DISPONIBLE') {
+        @if (pet.estado.toString().toUpperCase() === 'DISPONIBLE') {
           <div class="btn-split-layout">
             <button class="btn-action shadow-sm" (click)="irAAdopciones(); $event.stopPropagation()">
               Más información
