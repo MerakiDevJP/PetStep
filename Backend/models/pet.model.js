@@ -14,7 +14,7 @@ const petSchema = new mongoose.Schema({
     },
     estado: {
         type: String,
-        enum: ['DISPONIBLE', 'RECONECTADO', 'EN_PROCESO', 'RESERVADO'],
+        enum: ['DISPONIBLE', 'RECONECTADO', 'EN_PROCESO', 'RESERVADO', 'EXTRAVIADO', 'HALLADO'],
         default: 'DISPONIBLE'
     },
     fotoUrl: {
@@ -22,9 +22,9 @@ const petSchema = new mongoose.Schema({
         required: [true, 'La URL de la foto es obligatoria'],
         trim: true
     },
-    historia: {
+    descripcion: {
         type: String,
-        required: [true, 'La historia es obligatoria'],
+        required: [true, 'La descripción es obligatoria'],
         trim: true
     },
     salud: {

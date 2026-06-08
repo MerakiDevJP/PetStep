@@ -8,6 +8,7 @@ router.get('/pets', petController.getPets);
 router.get('/pets/:id', petController.getPetById);
 router.post('/pets', petController.createPet);
 router.post('/adoptions', petController.createAdoption);
+router.post('/lost-reports', petController.createLostReport);
 router.post('/pets/:id/tracking', petController.addPetTracking);
 
 // Rutas nuevas que complementan el archivo
