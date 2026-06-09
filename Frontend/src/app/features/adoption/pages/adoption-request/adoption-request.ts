@@ -31,7 +31,7 @@ export class AdoptionRequest implements OnInit {
       age: ['', [Validators.required, adultValidator]],
       address: ['', [Validators.required, Validators.minLength(5)]],
       petName: ['', Validators.required],
-      petPhotoUrl: ['', [Validators.pattern(/^https?:\/\/.+/)]],
+      petPhotoUrl: ['', [Validators.required,Validators.pattern(/^https?:\/\/.+/)]],
       petDescription: ['', [Validators.required, Validators.minLength(20)]],
       message: ['']
     });
@@ -75,9 +75,8 @@ export class AdoptionRequest implements OnInit {
     }
     if (ctrl.errors['pattern']) {
       if (field === 'phone') return 'Número de teléfono no válido.';
-      return 'Formato inválido.';
+      if (field === 'petPhotoUrl') return 'Ingresa una URL válida (https://...).';
     }
-    if (ctrl.errors['pattern']) return 'Ingresa una URL válida (https://...).';
     return 'Campo inválido.';
   }
 
