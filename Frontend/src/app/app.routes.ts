@@ -35,6 +35,12 @@ export const routes: Routes = [
         m => m.AdoptionRequest
       )
   },
+  {
+  path: 'pet-register',
+  loadComponent: () =>
+    import('./features/adoption/pages/pet-register/pet-register')
+    .then(m => m.PetRegister)
+  },
 
   {
     path: '**',
