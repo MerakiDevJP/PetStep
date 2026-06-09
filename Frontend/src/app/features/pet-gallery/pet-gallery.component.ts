@@ -58,7 +58,7 @@ export class PetGalleryComponent implements OnInit {
    */
   public irAReportePerdida(): void {
     // Ajusta la ruta '/reportar-perdida' según cómo la tengas declarada en tu app.routes.ts
-    this._router.navigate(['/reportar-perdida']); 
+    this._router.navigate(['/adoption']); 
   }
   
   /**
