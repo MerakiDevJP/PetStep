@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PetRegister } from '../pet-register/pet-register';
 import {
   FormBuilder,
   FormGroup,
@@ -14,7 +13,7 @@ type FormMode = 'adoption' | 'lost';
 @Component({
   selector: 'app-adoption-request',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PetRegister],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './adoption-request.html',
   styleUrl: './adoption-request.scss'
 })
@@ -32,6 +31,7 @@ export class AdoptionRequest implements OnInit {
       age: ['', [Validators.required, adultValidator]],
       address: ['', [Validators.required, Validators.minLength(5)]],
       petName: ['', Validators.required],
+      petPhotoUrl: ['', [Validators.pattern(/^https?:\/\/.+/)]],
       petDescription: ['', [Validators.required, Validators.minLength(20)]],
       message: ['']
     });
@@ -77,6 +77,7 @@ export class AdoptionRequest implements OnInit {
       if (field === 'phone') return 'Número de teléfono no válido.';
       return 'Formato inválido.';
     }
+    if (ctrl.errors['pattern']) return 'Ingresa una URL válida (https://...).';
     return 'Campo inválido.';
   }
 
