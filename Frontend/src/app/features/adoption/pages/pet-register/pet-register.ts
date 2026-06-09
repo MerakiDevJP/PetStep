@@ -23,7 +23,7 @@ export class PetRegister {
   submitSuccess = false;
 
   especieOptions = ['Perro', 'Gato', 'Conejo', 'Ave', 'Otro'];
-  estadoOptions = ['DISPONIBLE', 'RECONECTADO', 'EN_PROCESO', 'RESERVADO'];
+  estadoOptions = ['DISPONIBLE', 'EN PROCESO', 'ADOPTADO', 'PERDIDO', 'RECUPERADO'];
 
   constructor(private fb: FormBuilder) {
     this.petForm = this.fb.group({
