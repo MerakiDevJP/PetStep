@@ -31,13 +31,33 @@ export class AdoptionRequest implements OnInit {
       age: ['', [Validators.required, adultValidator]],
       address: ['', [Validators.required, Validators.minLength(5)]],
       petName: ['', Validators.required],
-      petPhotoUrl: ['', [Validators.required,Validators.pattern(/^https?:\/\/.+/)]],
+
+      // NO poner Validators.required aquí
+      petPhotoUrl: ['', [Validators.pattern(/^https?:\/\/.+/)]],
+
       petDescription: ['', [Validators.required, Validators.minLength(20)]],
       message: ['']
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.adoptionForm.get('formMode')?.valueChanges.subscribe(mode => {
+      const photoControl = this.adoptionForm.get('petPhotoUrl');
+
+      if (mode === 'lost') {
+        photoControl?.setValidators([
+          Validators.required,
+          Validators.pattern(/^https?:\/\/.+/)
+        ]);
+      } else {
+        photoControl?.setValidators([
+          Validators.pattern(/^https?:\/\/.+/)
+        ]);
+      }
+
+      photoControl?.updateValueAndValidity();
+    });
+  }
 
   get f() {
     return this.adoptionForm.controls;
@@ -51,32 +71,60 @@ export class AdoptionRequest implements OnInit {
     return this.currentMode === 'adoption';
   }
 
-  /** Devuelve true si el campo fue tocado o el form fue enviado */
   isInvalid(field: string): boolean {
     const control = this.f[field];
-    return !!(control && control.invalid && (control.dirty || control.touched || this.submitted));
+    return !!(
+      control &&
+      control.invalid &&
+      (control.dirty || control.touched || this.submitted)
+    );
   }
 
   isValid(field: string): boolean {
     const control = this.f[field];
-    return !!(control && control.valid && (control.dirty || control.touched));
+    return !!(
+      control &&
+      control.valid &&
+      (control.dirty || control.touched)
+    );
   }
 
   getError(field: string): string {
     const ctrl = this.f[field];
     if (!ctrl || !ctrl.errors) return '';
 
-    if (ctrl.errors['required']) return 'Este campo es obligatorio.';
-    if (ctrl.errors['email']) return 'Ingresa un correo electrónico válido.';
-    if (ctrl.errors['adult']) return 'Debes ser mayor de 18 años para continuar.';
+    if (ctrl.errors['required']) {
+      if (field === 'petPhotoUrl') {
+        return 'La foto de la mascota es obligatoria.';
+      }
+      return 'Este campo es obligatorio.';
+    }
+
+    if (ctrl.errors['email']) {
+      return 'Ingresa un correo electrónico válido.';
+    }
+
+    if (ctrl.errors['adult']) {
+      return 'Debes ser mayor de 18 años para continuar.';
+    }
+
     if (ctrl.errors['minlength']) {
       const min = ctrl.errors['minlength'].requiredLength;
       return `Mínimo ${min} caracteres requeridos.`;
     }
+
     if (ctrl.errors['pattern']) {
-      if (field === 'phone') return 'Número de teléfono no válido.';
-      if (field === 'petPhotoUrl') return 'Ingresa una URL válida (https://...).';
+      if (field === 'phone') {
+        return 'Número de teléfono no válido.';
+      }
+
+      if (field === 'petPhotoUrl') {
+        return 'Ingresa una URL válida (https://...).';
+      }
+
+      return 'Formato inválido.';
     }
+
     return 'Campo inválido.';
   }
 
