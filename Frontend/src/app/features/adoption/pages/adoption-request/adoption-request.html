@@ -109,10 +109,10 @@
         <div class="field-group" *ngIf="!isAdoption"
   [class.field-group--error]="isInvalid('petPhotoUrl')"
   [class.field-group--ok]="isValid('petPhotoUrl')">
-  <label class="field-label" for="petPhotoUrl">
-    Foto de la mascota
-    <span class="optional-tag">Opcional</span>
-  </label>
+ <label class="field-label" for="petPhotoUrl">
+  Foto de la mascota 
+  <span class="required-dot">*</span>
+</label>
   <div class="field-input-wrap">
     <input
       id="petPhotoUrl"
@@ -133,7 +133,7 @@
 
         <div class="field-group" [class.field-group--error]="isInvalid('petDescription')" [class.field-group--ok]="isValid('petDescription')">
           <label class="field-label" for="petDescription">
-            {{ isAdoption ? 'Descripción / por qué quieres adoptar' : 'Descripción de la mascota perdida' }}
+            {{ isAdoption ? 'Por qué quieres adoptar' : 'Descripción de la mascota perdida' }}
             <span class="required-dot">*</span>
           </label>
           <div class="field-input-wrap">
