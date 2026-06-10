@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -22,25 +23,32 @@ export class AdoptionRequest implements OnInit {
   submitted = false;
   submitSuccess = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,private route: ActivatedRoute) {
     this.adoptionForm = this.fb.group({
       formMode: ['adoption', Validators.required],
+      mascotaId: [''],
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\+?[\d\s\-]{7,15}$/)]],
       age: ['', [Validators.required, adultValidator]],
       address: ['', [Validators.required, Validators.minLength(5)]],
       petName: ['', Validators.required],
-
-      // NO poner Validators.required aquí
       petPhotoUrl: ['', [Validators.pattern(/^https?:\/\/.+/)]],
-
       petDescription: ['', [Validators.required, Validators.minLength(20)]],
       message: ['']
     });
   }
 
   ngOnInit(): void {
+  const tipo = this.route.snapshot.queryParamMap.get('tipo');
+  const mascota = this.route.snapshot.queryParamMap.get('mascota');
+  const mascotaId = this.route.snapshot.queryParamMap.get('mascotaId');
+
+  console.log(tipo);
+  console.log(mascota);
+  console.log(mascotaId);
+
+
     this.adoptionForm.get('formMode')?.valueChanges.subscribe(mode => {
       const photoControl = this.adoptionForm.get('petPhotoUrl');
 
