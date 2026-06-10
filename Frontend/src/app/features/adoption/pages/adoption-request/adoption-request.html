@@ -106,10 +106,34 @@
           </div>
           <p class="field-error" *ngIf="isInvalid('petName')" role="alert"><span class="error-dot">●</span> {{ getError('petName') }}</p>
         </div>
+        <div class="field-group" *ngIf="!isAdoption"
+  [class.field-group--error]="isInvalid('petPhotoUrl')"
+  [class.field-group--ok]="isValid('petPhotoUrl')">
+ <label class="field-label" for="petPhotoUrl">
+  Foto de la mascota 
+  <span class="required-dot">*</span>
+</label>
+  <div class="field-input-wrap">
+    <input
+      id="petPhotoUrl"
+      type="url"
+      class="field-input"
+      formControlName="petPhotoUrl"
+      placeholder="https://ejemplo.com/foto-de-mi-mascota.jpg" />
+    <span class="field-icon field-icon--ok">✓</span>
+    <span class="field-icon field-icon--err">✕</span>
+  </div>
+  <p class="field-error" *ngIf="isInvalid('petPhotoUrl')" role="alert">
+    <span class="error-dot">●</span> {{ getError('petPhotoUrl') }}
+  </p>
+  <p class="field-hint" *ngIf="!isInvalid('petPhotoUrl')">
+    Pega el enlace directo a la foto de tu mascota perdida.
+  </p>
+</div>
 
         <div class="field-group" [class.field-group--error]="isInvalid('petDescription')" [class.field-group--ok]="isValid('petDescription')">
           <label class="field-label" for="petDescription">
-            {{ isAdoption ? 'Descripción / por qué quieres adoptar' : 'Descripción de la mascota perdida' }}
+            {{ isAdoption ? 'Por qué quieres adoptar' : 'Descripción de la mascota perdida' }}
             <span class="required-dot">*</span>
           </label>
           <div class="field-input-wrap">
@@ -143,9 +167,6 @@
 
       </form>
     </div>
-
-    <!-- ── DERECHA: Formulario de Registro de Mascota ── -->
-    <app-pet-register></app-pet-register>
 
   </div>
 </section>

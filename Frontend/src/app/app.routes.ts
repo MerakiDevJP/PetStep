@@ -47,6 +47,12 @@ export const routes: Routes = [
         import('./features/traceability/traceability.component')
         .then(m => m.TraceabilityComponent)
   },
+  {
+  path: 'pet-register',
+  loadComponent: () =>
+    import('./features/adoption/pages/pet-register/pet-register')
+    .then(m => m.PetRegister)
+  },
 
   {
       path: 'adopt-responsable',
