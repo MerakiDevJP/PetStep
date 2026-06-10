@@ -28,8 +28,7 @@ export class PetGalleryComponent implements OnInit {
    */
   private _criterioBusqueda = signal<string>('');
 
-  /** 
-   * Se utilizan Signals computados para derivar las listas filtradas.
+  /** * Se utilizan Signals computados para derivar las listas filtradas.
    * Reaccionan automáticamente si cambia el estado global en el servicio o el criterio de búsqueda.
    */
   public enAdopcion = computed(() => 
@@ -49,16 +48,18 @@ export class PetGalleryComponent implements OnInit {
   );
 
   public recuperados = computed(() => 
-    this._filtrarMascotasPorEspecie(PetStatus.RECONECTADO)
+    this._filtrarMascotasPorEspecie(PetStatus.RECUPERADO)
   );
 
   /**
    * Método encargado de gestionar la redirección al formulario global de reportes.
    * Vinculado directamente al evento (click) del botón en la sección de Perdidos.
+   * Hereda el queryParam para pre-seleccionar 'extraviado'
    */
   public irAReportePerdida(): void {
-    // Ajusta la ruta '/reportar-perdida' según cómo la tengas declarada en tu app.routes.ts
-    this._router.navigate(['/adoption']); 
+    this._router.navigate(['/adoption'], {
+      queryParams: { tipo: 'extraviado' }
+    }); 
   }
   
   /**

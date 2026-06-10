@@ -15,8 +15,9 @@
       
       <li>
         <a routerLink="/mascotas" routerLinkActive="active-link" class="nav-item">
-          <span class="nav-icon">🐾</span>
+          <span class="nav-icon">🐱</span>
           <span class="nav-text">Mascotas</span>
+          <span class="nav-icon">🐶</span>
         </a>
       </li>
       
@@ -27,29 +28,38 @@
         </a>
       </li>
 
+      <li>
+        <a routerLink="/registro-mascota" routerLinkActive="active-link" class="nav-item">
+          <span class="nav-icon">🐾</span>
+          <span class="nav-text">Registros</span>
+        </a>
+      </li>
+
       @if (isLoggedIn) {
-        <li class="nav-item-dropdown">
-          <a routerLink="/plataforma" routerLinkActive="active-link" class="nav-item">
+        <li class="nav-item-dropdown" [class.open]="isPlatformMenuOpen">
+          <a (click)="togglePlatformMenu($event)" class="nav-item platform-trigger" style="cursor: pointer;">
             <span class="nav-icon">💻</span>
             <span class="nav-text">Plataforma</span>
+            <span class="dropdown-arrow">{{ isPlatformMenuOpen ? '▲' : '▼' }}</span>
           </a>
-          <ul class="dropdown-submenu">
-            <li>
-              <a routerLink="/trazabilidad" routerLinkActive="active-sub-link">
-                📍 Trazabilidad
-              </a>
-            </li>
-            <li>
-              <a routerLink="/edu-responsable" routerLinkActive="active-sub-link">
-                📋 Pasos de Adopción
-              </a>
-            </li>
-          </ul>
+          
+          @if (isPlatformMenuOpen) {
+            <ul class="dropdown-submenu">
+              <li>
+                <a routerLink="/trazabilidad" routerLinkActive="active-sub-link">
+                  📍 Trazabilidad
+                </a>
+              </li>
+              <li>
+                <a routerLink="/adopt-responsable" routerLinkActive="active-sub-link">
+                  📋 Pasos de Adopción
+                </a>
+              </li>
+            </ul>
+          }
         </li>
       }
-    </ul>
-
-    <div class="nav-actions">
+    </ul> <div class="nav-actions">
       <button class="btn-nav-login" (click)="toggleLogin()">
         <span>{{ isLoggedIn ? '🚪' : '🔑' }}</span> 
         {{ isLoggedIn ? 'Cerrar Sesión' : 'Iniciar Sesión' }}

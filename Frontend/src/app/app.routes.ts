@@ -33,7 +33,14 @@ export const routes: Routes = [
       )
       .then(m => m.AdoptionRequest)
   },
-
+  {
+    path: 'registro-mascota',
+    loadComponent: () =>
+      import(
+        './features/adoption/pages/pet-register/pet-register'
+      )
+      .then(m => m.PetRegister)
+  },
   {
       path: 'trazabilidad',
       loadComponent: () =>
@@ -42,11 +49,12 @@ export const routes: Routes = [
   },
 
   {
-      path: 'edu-responsable',
+      path: 'adopt-responsable',
       loadComponent: () =>
-        import('./features/responsible-edu/responsible-edu.component')
-        .then(m => m.ResponsibleEduComponent)
+        import('./features/responsible-adopt/responsible-adopt.component')
+        .then(m => m.ResponsibleAdoptComponent)
   },
+  
   {
     path: '**',
     redirectTo: 'mascotas'

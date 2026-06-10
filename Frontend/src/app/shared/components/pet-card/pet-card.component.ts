@@ -40,17 +40,35 @@ export class PetCardComponent implements OnInit {
   }
 
   /**
-   * Enrutamiento directo al módulo de adopciones (Corregido sin paréntesis)
+   * Enrutamiento directo al módulo de adopciones con paso de contexto completo.
+   * Envía 'tipo', 'mascota' (nombre) y 'mascotaId' (ID de Mongo)
    */
   public irAAdopciones(): void {
-    this.router.navigate(['/adoption'], { queryParams: { petId: this.pet.id } }); // 🚀 Corregido: this.pet.id
+    if (this.pet) {
+      // Validación preventiva para capturar el ID de MongoDB de cualquier forma (_id o id)
+      const idMascota = this.pet._id || this.pet.id;
+      
+      this.router.navigate(['/adoption'], { 
+        queryParams: { 
+          tipo: 'adopcion',            // Pre-selecciona la opción en el formulario
+          mascota: this.pet.nombre,  // Muestra el nombre en el frontend (soporta nombre o name)
+          mascotaId: idMascota         // Envía el ID real que validará Express
+        } 
+      });
+    }
   }
 
   /**
-   * Enrutamiento directo al módulo de reportes (Corregido sin paréntesis)
+   * Enrutamiento directo al módulo de reportes (Se mantiene apuntando a tu ruta global)
    */
   public irAReportePerdida(): void {
-    this.router.navigate(['/reportes/perdida'], { queryParams: { petId: this.pet.id } }); // 🚀 Corregido: this.pet.id
+    const idMascota = this.pet._id || this.pet.id;
+    this.router.navigate(['/adoption'], { 
+      queryParams: { 
+        tipo: 'extraviado',
+        mascotaId: idMascota 
+      } 
+    });
   }
 
   /**
@@ -62,7 +80,7 @@ export class PetCardComponent implements OnInit {
       [PetStatus.EN_PROCESO]: '#F39C12',  // Naranja
       [PetStatus.ADOPTADO]: '#2980B9',    // Azul
       [PetStatus.PERDIDO]: '#C0392B',     // Rojo
-      [PetStatus.RECONECTADO]: '#F1C40F'  // Amarillo
+      [PetStatus.RECUPERADO]: '#F1C40F'   // Amarillo
     };
     return colors[estado] || '#BDC3C7';   // Gris por defecto
   }
