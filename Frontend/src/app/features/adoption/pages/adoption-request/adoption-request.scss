@@ -21,23 +21,12 @@
   padding: 3rem 1.5rem 4rem;
 }
 
-// ── Layout de dos columnas ────────────────────────────────────
+// ── Layout una sola columna ────────────────────────────────────
 .forms-layout {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 1320px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.75rem;
-  align-items: flex-start;
-
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr;
-    max-width: 680px;
-  }
-  overflow: hidden;
-  background-color: var(--bg-crema);
+  max-width: 680px;
 }
 
 // ── Blobs decorativos ────────────────────────────────────────

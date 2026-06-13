@@ -10,6 +10,10 @@
 }
 
 .pet-card {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+
   background: #fff;
   border-radius: 20px;
   box-shadow:
@@ -18,7 +22,6 @@
     0 0 0 1px rgba(11,37,69,.05);
   overflow: hidden;
   animation: petCardIn .5s .1s cubic-bezier(.22,.68,0,1.2) both;
-
   &__header {
     padding: 1.75rem 2rem 1.25rem;
     background: linear-gradient(135deg, var(--support-verde) 0%, #388E3C 100%);

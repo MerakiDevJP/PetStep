@@ -6,29 +6,71 @@ import { Pet, PetStatus } from '../models/pet.model';
 
 @Injectable({ providedIn: 'root' })
 export class PetService {
-  private readonly API_URL ='http://localhost:3000/api/pets';
+  // Usamos el prefijo relativo gracias al proxy-config de Angular
+  private readonly API_URL = '/api';
+
+  // El Signal arranca limpio (vacío) esperando los datos reales de MongoDB
   private petsSignal = signal<Pet[]>([]);
   public pets = this.petsSignal.asReadonly();
+
+  // Inyección moderna de dependencias en Angular
   private http = inject(HttpClient);
 
+  // =========================================================================
+  // MÓDULO GALERÍA / CONSULTAS (Dev3 Optimizations)
+  // =========================================================================
+
+  /**
+   * Carga la lista completa de mascotas desde la base de datos distribuida
+   */
   public getAllPets(): void {
-    this.http.get<Pet[]>(this.API_URL).subscribe({
+    this.http.get<Pet[]>(`${this.API_URL}/pets`).subscribe({
       next: (data) => this.petsSignal.set(data),
       error: (err) => console.error('Error al conectar con la API de PetStep:', err)
     });
   }
 
+  /**
+   * Alias compatible para Dev2: Obtiene las mascotas disponibles en formato de Observable
+   */
+  public obtenerMascotas(): Observable<Pet[]> {
+    return this.http.get<Pet[]>(`${this.API_URL}/pets`);
+  }
+
+  /**
+   * Modifica el estado de una mascota en MongoDB y actualiza reactivamente la interfaz
+   */
   public updatePetStatus(id: string, status: PetStatus): Observable<Pet> {
-    return this.http.patch<Pet>(`${this.API_URL}/${id}/status`, { estado: status }).pipe(
-      tap((updatedPet) => {
+    return this.http.patch<Pet>(`${this.API_URL}/pets/${id}/status`, { estado: status }).pipe(tap((updatedPet) => {
         this.petsSignal.update((currentPets) =>
           currentPets.map((pet) => (pet.id === id ? { ...pet, estado: updatedPet.estado } : pet))
         );
       })
     );
   }
+  // =========================================================================
+  // MÓDULO FORMULARIOS / PERSISTENCIA (Dev2 Integrations)
+  // =========================================================================
 
-  public registrarMascota(petData: any): Observable<any> {
-    return this.http.post<any>(this.API_URL, petData);
+  /**
+   * 1. Enviar datos del Formulario de Registro de Mascotas (Administrador)
+   */
+  public registrarMascota(mascota: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/pets`, mascota);
   }
+
+  /**
+   * 2. Enviar datos del Formulario de Solicitud de Adopción o Reporte de Extraviado
+   */
+  public enviarSolicitudAdopcion(solicitud: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/adoptions`, solicitud);
+  }
+
+  /**
+   * Alias genérico alternativo para procesos del Frontend unificado
+   */
+  public crearSolicitud(solicitud: any): Observable<any> {
+    return this.enviarSolicitudAdopcion(solicitud);
+  }
+
 }
