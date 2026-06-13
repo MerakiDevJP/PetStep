@@ -6,23 +6,15 @@ const AdoptionRequest = require('../models/adoptionRequest.model');
 const getPets = async (req, res) => {
     try {
         const { especie } = req.query;
+        console.log(`Request recibida. Buscando mascotas de especie: ${especie || 'Todas'}`);
+
         let filtro = {};
-        
-        // Mantener el filtro si existe
         if (especie) {
-            filtro.especie = { $regex: new RegExp(especie, 'i') };
+            filtro.species = { $regex: new RegExp(especie, 'i') };
         }
 
         const mascotas = await Pet.find(filtro);
-
-        const mascotasConImagen = mascotas.map(mascota => {
-            const m = mascota.toObject();
-            // URL de imagen directa
-            m.fotoUrl = m.fotoUrl || 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=500';
-            return m;
-        });
-
-        res.status(200).json(mascotasConImagen);
+        res.status(200).json(mascotas);
     } catch (error) {
         res.status(500).json({ error: 'Server Error', message: error.message });
     }
@@ -43,18 +35,16 @@ const getPetById = async (req, res) => {
     }
 };
 
-// 3. POST: Registrar una nueva mascota desde el catálogo
+// 3. POST: Registrar una nueva mascota
 const createPet = async (req, res) => {
     try {
         const nuevaMascota = new Pet({
-            nombre: req.body.nombre,
-            especie: req.body.especie,
-            estado: req.body.estado || 'DISPONIBLE',
-            fotoUrl: req.body.fotoUrl,
-            descripcion: req.body.descripcion || req.body.historia || req.body.history,
-            salud: req.body.salud,
-            temperamento: req.body.temperamento,
-            comentarios: req.body.comentarios || []
+            name: req.body.nombre,
+            species: req.body.especie,
+            breed: req.body.raza,
+            age: req.body.edad,
+            description: req.body.descripcion,
+            status: req.body.estado || 'Disponible'
         });
 
         const mascotaGuardada = await nuevaMascota.save();
@@ -64,71 +54,47 @@ const createPet = async (req, res) => {
     }
 };
 
-// 4. POST: Procesar exclusivamente Solicitudes de Adopción tradicional
+// 4. POST: Formulario de adopción
 const createAdoption = async (req, res) => {
     try {
-        const { fullName, email, petId, petName } = req.body;
-        console.log("Datos recibidos:", { fullName, email, petId, petName });
+        const { nombreAdoptante, correo, mascotaId, edadAdoptante, telefono, motivos } = req.body;
 
-        let mascota;
-        // Búsqueda inteligente
-        if (petId) {
-            mascota = await Pet.findById(petId);
-        } else if (petName) {
-            // Buscamos por nombre si no hay ID
-            mascota = await Pet.findOne({ nombre: petName });
+        if (!nombreAdoptante || !correo || !mascotaId) {
+            return res.status(400).json({
+                error: 'Bad Request',
+                message: 'Faltan campos obligatorios (nombreAdoptante, correo o mascotaId).'
+            });
         }
 
+        const mascota = await Pet.findById(mascotaId);
         if (!mascota) {
-            return res.status(404).json({ error: 'Not Found', message: 'Mascota no encontrada' });
+            return res.status(404).json({ error: 'Not Found', message: 'La mascota especificada no existe.' });
         }
 
-        // ... resto de tu código de guardado ...
-
-        res.status(201).json({ message: 'Éxito' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// 4b. POST: Nuevo Módulo exclusivo para registrar Mascotas Extraviadas (Versión Dinámica Integrada)
-const createLostReport = async (req, res) => {
-    try {
-        const { petName, petDescription, fullName, phone, address, message, fotoUrl } = req.body;
-
-        if (!petName || !fullName) {
-            return res.status(400).json({ error: 'Bad Request', message: 'El nombre de la mascota y del informante son obligatorios.' });
-        }
-
-        console.log(`Procesando reporte de mascota extraviada: ${petName}`);
-
-        const mascotaExtraviada = new Pet({
-            nombre: petName,
-            especie: 'Perro',
-            estado: 'EXTRAVIADO',
-            // Usa fotoUrl si viene en el body, de lo contrario aplica el placeholder real de internet
-            fotoUrl: fotoUrl || 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=500',
-            descripcion: petDescription || 'No especificada',
-            salud: 'Desconocido (Reporte de extravío)',
-            temperamento: 'Desconocido',
-            comentarios: [{
-                autor: fullName,
-                texto: `Reportado como extraviado en: ${address}. Nota: ${message || 'Sin observaciones'}. Teléfono de contacto: ${phone}`,
-                fecha: new Date()
-            }]
+        const nuevaSolicitud = new AdoptionRequest({
+            pet: mascotaId,
+            applicantName: nombreAdoptante,
+            applicantAge: edadAdoptante || 18,
+            email: correo,
+            phone: telefono || 'Sin teléfono',
+            reasons: motivos || 'Sin motivos especificados'
         });
 
-        const guardada = await mascotaExtraviada.save();
+        const solicitudGuardada = await nuevaSolicitud.save();
+
+        mascota.status = 'En Proceso';
+        await mascota.save();
+
         res.status(201).json({
-            message: '¡Reporte de mascota extraviada guardada con éxito en MongoDB!',
-            data: guardada
+            message: '¡Solicitud de adopción procesada con éxito!',
+            data: solicitudGuardada
         });
     } catch (error) {
         res.status(400).json({ error: 'Bad Request', message: error.message });
     }
 };
 
-// 5. POST: Línea de tiempo / Seguimiento 
+// 5. POST: Línea de tiempo / Seguimiento
 const addPetTracking = async (req, res) => {
     const { id } = req.params;
     const { comentario } = req.body;
@@ -140,14 +106,12 @@ const updatePetFull = async (req, res) => {
     try {
         const { id } = req.params;
         const datosActualizados = {
-            nombre: req.body.nombre,
-            especie: req.body.especie,
-            estado: req.body.estado,
-            fotoUrl: req.body.fotoUrl,
-            descripcion: req.body.descripcion || req.body.historia,
-            salud: req.body.salud,
-            temperamento: req.body.temperamento,
-            comentarios: req.body.comentarios
+            name: req.body.nombre,
+            species: req.body.especie,
+            breed: req.body.raza,
+            age: req.body.edad,
+            description: req.body.descripcion,
+            status: req.body.estado
         };
 
         const mascotaActualizada = await Pet.findByIdAndUpdate(id, datosActualizados, { new: true, runValidators: true });
@@ -157,7 +121,7 @@ const updatePetFull = async (req, res) => {
         }
 
         res.status(200).json({
-            message: `PUT - Perfil de la mascota ${id} actualizado por completo en MongoDB.`,
+            message: `Mascota ${id} actualizada correctamente.`,
             data: mascotaActualizada
         });
     } catch (error) {
@@ -165,20 +129,20 @@ const updatePetFull = async (req, res) => {
     }
 };
 
-// 7. PATCH: Actualización PARCIAL (Solo el estado)
+// 7. PATCH: Actualización PARCIAL (solo estado)
 const updatePetStatus = async (req, res) => {
     try {
         const { id } = req.params;
         const { estado } = req.body;
 
-        const mascotaActualizada = await Pet.findByIdAndUpdate(id, { estado: estado }, { new: true, runValidators: true });
+        const mascotaActualizada = await Pet.findByIdAndUpdate(id, { status: estado }, { new: true, runValidators: true });
 
         if (!mascotaActualizada) {
             return res.status(404).json({ error: 'Not Found', message: 'Mascota no encontrada' });
         }
 
         res.status(200).json({
-            message: `PATCH - Estado de la mascota ${id} cambiado a ${estado}.`,
+            message: `Estado de mascota ${id} cambiado a ${estado}.`,
             data: mascotaActualizada,
             fecha: new Date()
         });
@@ -187,7 +151,7 @@ const updatePetStatus = async (req, res) => {
     }
 };
 
-// 8. DELETE: Eliminación de la base de datos
+// 8. DELETE: Eliminación del sistema
 const deletePet = async (req, res) => {
     try {
         const { id } = req.params;
@@ -198,7 +162,7 @@ const deletePet = async (req, res) => {
         }
 
         res.status(200).json({
-            message: `DELETE - Mascota con ID ${id} eliminada correctamente de MongoDB.`
+            message: `Mascota ${id} eliminada correctamente.`
         });
     } catch (error) {
         res.status(500).json({ error: 'Server Error', message: error.message });
@@ -210,7 +174,6 @@ module.exports = {
     getPetById,
     createPet,
     createAdoption,
-    createLostReport,
     addPetTracking,
     updatePetFull,
     updatePetStatus,

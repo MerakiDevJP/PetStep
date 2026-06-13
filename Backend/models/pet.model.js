@@ -1,49 +1,37 @@
-// models/pet.model.js
+/// models/pet.model.js
 const mongoose = require('mongoose');
 
 const petSchema = new mongoose.Schema({
-    nombre: {
+    name: {
         type: String,
         required: [true, 'El nombre de la mascota es obligatorio'],
         trim: true
     },
-    especie: {
+    species: {
         type: String,
-        required: [true, 'La especie es obligatoria'],
+        required: [true, 'La especie es obligatoria (ej: Perro, Gato)'],
         trim: true
     },
-    estado: {
+    breed: {
         type: String,
-        enum: ['DISPONIBLE', 'RECONECTADO', 'EN_PROCESO', 'RESERVADO', 'EXTRAVIADO', 'HALLADO'],
-        default: 'DISPONIBLE'
+        trim: true,
+        default: 'Mestizo'
     },
-    fotoUrl: {
+    age: {
+        type: Number,
+        required: [true, 'La edad es obligatoria']
+    },
+    description: {
         type: String,
-        required: [true, 'La URL de la foto es obligatoria'],
         trim: true
     },
-    descripcion: {
+    status: {
         type: String,
-        required: [true, 'La descripción es obligatoria'],
-        trim: true
-    },
-    salud: {
-        type: String,
-        required: [true, 'El estado de salud es obligatorio'],
-        trim: true
-    },
-    temperamento: {
-        type: String,
-        required: [true, 'El temperamento es obligatorio'],
-        trim: true
-    },
-    comentarios: [{
-        autor: { type: String, trim: true },
-        texto: { type: String, trim: true },
-        fecha: { type: Date, default: Date.now }
-    }]
+        enum: ['Disponible', 'En Proceso', 'Adoptado'],
+        default: 'Disponible'
+    }
 }, {
-    timestamps: true // Mantiene automáticamente createdAt y updatedAt
+    timestamps: true
 });
 
 module.exports = mongoose.model('Pet', petSchema);
