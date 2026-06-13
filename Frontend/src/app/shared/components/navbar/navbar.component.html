@@ -35,7 +35,7 @@
         </a>
       </li>
 
-      @if (isLoggedIn) {
+      @if (authService.isLoggedIn()) {
         <li class="nav-item-dropdown" [class.open]="isPlatformMenuOpen">
           <a (click)="togglePlatformMenu($event)" class="nav-item platform-trigger" style="cursor: pointer;">
             <span class="nav-icon">💻</span>
@@ -55,14 +55,21 @@
                   📋 Pasos de Adopción
                 </a>
               </li>
+              <li>
+                <a routerLink="/solicitudes" routerLinkActive="active-sub-link">
+                  ✅ Aprobar solicitudes
+                </a>
+              </li>
             </ul>
           }
         </li>
       }
-    </ul> <div class="nav-actions">
+    </ul>
+
+    <div class="nav-actions">
       <button class="btn-nav-login" (click)="toggleLogin()">
-        <span>{{ isLoggedIn ? '🚪' : '🔑' }}</span> 
-        {{ isLoggedIn ? 'Cerrar Sesión' : 'Iniciar Sesión' }}
+        <span>{{ authService.isLoggedIn() ? '🚪' : '🔑' }}</span>
+        {{ authService.isLoggedIn() ? 'Cerrar Sesión' : 'Iniciar Sesión' }}
       </button>
     </div>
 

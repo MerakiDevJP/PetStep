@@ -1,0 +1,32 @@
+<div class="adoption-list-container">
+  <h2>📋 Solicitudes de Adopción</h2>
+
+  @if (mensaje()) {
+    <div class="success-banner">{{ mensaje() }}</div>
+  }
+
+  @if (solicitudes().length === 0) {
+    <p class="empty-msg">No hay solicitudes pendientes.</p>
+  }
+
+  @for (s of solicitudes(); track s._id) {
+    <div class="solicitud-card">
+      <div class="solicitud-header">
+        <span class="pet-name">🐾 {{ s.pet?.name || 'Mascota' }}</span>
+        <span class="pet-species">{{ s.pet?.species }}</span>
+      </div>
+      <div class="solicitud-body">
+        <p><strong>Solicitante:</strong> {{ s.applicantName }}</p>
+        <p><strong>Correo:</strong> {{ s.email }}</p>
+        <p><strong>Teléfono:</strong> {{ s.phone }}</p>
+        <p><strong>Motivos:</strong> {{ s.reasons }}</p>
+        <p><strong>Fecha:</strong> {{ s.createdAt | date:'mediumDate' }}</p>
+      </div>
+      @if (isLoggedIn()) {
+        <button class="btn-aprobar" (click)="aprobar(s._id)">
+          ✅ Aprobar adopción
+        </button>
+      }
+    </div>
+  }
+</div>

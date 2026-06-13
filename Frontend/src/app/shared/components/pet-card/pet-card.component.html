@@ -86,20 +86,25 @@
       </div>
 
       <div class="back-footer-actions">
-        @if (pet.estado === 'DISPONIBLE') {
-          <div class="btn-split-layout">
+        <div class="btn-split-layout">
+          @if (pet.estado === 'DISPONIBLE') {
             <button class="btn-action shadow-sm" (click)="irAAdopciones(); $event.stopPropagation()">
               Más información
             </button>
-            <button class="btn-return" (click)="onFlip(); $event.stopPropagation()">
-              Volver al frente
+          }
+          @if (pet.estado !== 'DISPONIBLE' && authService.isLoggedIn()) {
+            <button class="btn-action shadow-sm" style="background:#27AE60; color:white;"
+              (click)="marcarRecuperado(); $event.stopPropagation()">
+              @if (pet.estado === 'PERDIDO')    { ✅ Marcar como recuperado }
+              @if (pet.estado === 'RECUPERADO') { 🔄 Marcar como disponible }
+              @if (pet.estado === 'EN PROCESO') { ✅ Aprobar adopción }
+              @if (pet.estado === 'ADOPTADO')   { 🔄 Marcar como disponible }
             </button>
-          </div>
-        } @else {
-          <button class="btn-return w-100" (click)="onFlip(); $event.stopPropagation()">
+          }
+          <button class="btn-return" (click)="onFlip(); $event.stopPropagation()">
             Volver al frente
           </button>
-        }
+        </div>
       </div>
 
     </div>

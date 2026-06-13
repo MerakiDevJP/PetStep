@@ -3,8 +3,6 @@
   <div class="blob blob--2" aria-hidden="true"></div>
 
   <div class="forms-layout">
-
-    <!-- ── IZQUIERDA: Formulario de Adopción ── -->
     <div class="form-card">
 
       <div class="form-card__header">
@@ -48,21 +46,26 @@
             <div class="field-input-wrap">
               <input id="fullName" type="text" class="field-input" formControlName="fullName"
                 placeholder="Ej. María García López" autocomplete="name" />
-              <span class="field-icon field-icon--ok">✓</span><span class="field-icon field-icon--err">✕</span>
+              <span class="field-icon field-icon--ok">✓</span>
+              <span class="field-icon field-icon--err">✕</span>
             </div>
-            <p class="field-error" *ngIf="isInvalid('fullName')" role="alert"><span class="error-dot">●</span> {{
-              getError('fullName') }}</p>
+            <p class="field-error" *ngIf="isInvalid('fullName')" role="alert">
+              <span class="error-dot">●</span> {{ getError('fullName') }}
+            </p>
           </div>
+
           <div class="field-group" [class.field-group--error]="isInvalid('email')"
             [class.field-group--ok]="isValid('email')">
             <label class="field-label" for="email">Correo electrónico <span class="required-dot">*</span></label>
             <div class="field-input-wrap">
               <input id="email" type="email" class="field-input" formControlName="email"
                 placeholder="correo@ejemplo.com" autocomplete="email" />
-              <span class="field-icon field-icon--ok">✓</span><span class="field-icon field-icon--err">✕</span>
+              <span class="field-icon field-icon--ok">✓</span>
+              <span class="field-icon field-icon--err">✕</span>
             </div>
-            <p class="field-error" *ngIf="isInvalid('email')" role="alert"><span class="error-dot">●</span> {{
-              getError('email') }}</p>
+            <p class="field-error" *ngIf="isInvalid('email')" role="alert">
+              <span class="error-dot">●</span> {{ getError('email') }}
+            </p>
           </div>
         </div>
 
@@ -71,23 +74,28 @@
             [class.field-group--ok]="isValid('phone')">
             <label class="field-label" for="phone">Teléfono <span class="required-dot">*</span></label>
             <div class="field-input-wrap">
-              <input id="phone" type="tel" class="field-input" formControlName="phone" placeholder="+593 99 123 4567"
-                autocomplete="tel" />
-              <span class="field-icon field-icon--ok">✓</span><span class="field-icon field-icon--err">✕</span>
+              <input id="phone" type="tel" class="field-input" formControlName="phone"
+                placeholder="+593 99 123 4567" autocomplete="tel" />
+              <span class="field-icon field-icon--ok">✓</span>
+              <span class="field-icon field-icon--err">✕</span>
             </div>
-            <p class="field-error" *ngIf="isInvalid('phone')" role="alert"><span class="error-dot">●</span> {{
-              getError('phone') }}</p>
+            <p class="field-error" *ngIf="isInvalid('phone')" role="alert">
+              <span class="error-dot">●</span> {{ getError('phone') }}
+            </p>
           </div>
+
           <div class="field-group" [class.field-group--error]="isInvalid('age')"
             [class.field-group--ok]="isValid('age')">
             <label class="field-label" for="age">Edad <span class="required-dot">*</span></label>
             <div class="field-input-wrap">
-              <input id="age" type="number" class="field-input" formControlName="age" placeholder="Mayor de 18 años"
-                min="1" max="120" />
-              <span class="field-icon field-icon--ok">✓</span><span class="field-icon field-icon--err">✕</span>
+              <input id="age" type="number" class="field-input" formControlName="age"
+                placeholder="Mayor de 18 años" min="1" max="120" />
+              <span class="field-icon field-icon--ok">✓</span>
+              <span class="field-icon field-icon--err">✕</span>
             </div>
-            <p class="field-error" *ngIf="isInvalid('age')" role="alert"><span class="error-dot">●</span> {{
-              getError('age') }}</p>
+            <p class="field-error" *ngIf="isInvalid('age')" role="alert">
+              <span class="error-dot">●</span> {{ getError('age') }}
+            </p>
             <p class="field-hint" *ngIf="!isInvalid('age')">Debes tener 18 años o más.</p>
           </div>
         </div>
@@ -98,37 +106,71 @@
           <div class="field-input-wrap">
             <input id="address" type="text" class="field-input" formControlName="address"
               placeholder="Calle, número, ciudad" autocomplete="street-address" />
-            <span class="field-icon field-icon--ok">✓</span><span class="field-icon field-icon--err">✕</span>
+            <span class="field-icon field-icon--ok">✓</span>
+            <span class="field-icon field-icon--err">✕</span>
           </div>
-          <p class="field-error" *ngIf="isInvalid('address')" role="alert"><span class="error-dot">●</span> {{
-            getError('address') }}</p>
+          <p class="field-error" *ngIf="isInvalid('address')" role="alert">
+            <span class="error-dot">●</span> {{ getError('address') }}
+          </p>
         </div>
 
         <div class="form-divider">
           <span>{{ isAdoption ? 'Sobre la mascota que deseas adoptar' : 'Sobre tu mascota perdida' }}</span>
         </div>
 
-        <div class="field-group" [class.field-group--error]="isInvalid('petName')"
+        <!-- Botón ir a galería — solo en modo adopción sin mascota preseleccionada -->
+        <div class="field-group" *ngIf="isAdoption && !adoptionForm.get('petName')?.value">
+          <label class="field-label">Mascota a adoptar <span class="required-dot">*</span></label>
+          <button type="button" class="btn-select-pet" (click)="irAGaleria()">
+            🐾 Ver mascotas disponibles
+          </button>
+          <p class="field-hint">Selecciona una mascota desde la galería para continuar.</p>
+        </div>
+
+        <!-- Campo nombre: en adopción solo si hay mascota preseleccionada, en extraviado siempre -->
+        <div class="field-group"
+          *ngIf="!isAdoption || adoptionForm.get('petName')?.value"
+          [class.field-group--error]="isInvalid('petName')"
           [class.field-group--ok]="isValid('petName')">
           <label class="field-label" for="petName">
-            {{ isAdoption ? 'Nombre de la mascota' : 'Nombre de tu mascota' }} <span class="required-dot">*</span>
+            {{ isAdoption ? 'Nombre de la mascota' : 'Nombre de tu mascota' }}
+            <span class="required-dot">*</span>
           </label>
           <div class="field-input-wrap">
             <input id="petName" type="text" class="field-input" formControlName="petName"
-              [placeholder]="isAdoption ? 'Ej. Firulais' : 'Nombre de tu mascota perdida'" />
-            <span class="field-icon field-icon--ok">✓</span><span class="field-icon field-icon--err">✕</span>
+              [placeholder]="isAdoption ? 'Ej. Firulais' : 'Nombre de tu mascota perdida'"
+              [readonly]="isAdoption" />
+            <span class="field-icon field-icon--ok">✓</span>
+            <span class="field-icon field-icon--err">✕</span>
           </div>
-          <p class="field-error" *ngIf="isInvalid('petName')" role="alert"><span class="error-dot">●</span> {{
-            getError('petName') }}</p>
+          <p class="field-error" *ngIf="isInvalid('petName')" role="alert">
+            <span class="error-dot">●</span> {{ getError('petName') }}
+          </p>
         </div>
 
+        <!-- Campo especie — solo en modo extraviado -->
+        <div class="field-group" *ngIf="!isAdoption"
+          [class.field-group--error]="isInvalid('petSpecies')"
+          [class.field-group--ok]="isValid('petSpecies')">
+          <label class="field-label" for="petSpecies">Especie de la mascota</label>
+          <div class="field-input-wrap">
+            <select id="petSpecies" class="field-input" formControlName="petSpecies">
+              <option value="">Seleccionar...</option>
+              <option value="Perro">Perro</option>
+              <option value="Gato">Gato</option>
+              <option value="Conejo">Conejo</option>
+              <option value="Ave">Ave</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+        </div>
 
-        <div class="field-group" *ngIf="!isAdoption" 
+        <!-- Campo foto — solo en modo extraviado -->
+        <div class="field-group" *ngIf="!isAdoption"
           [class.field-group--error]="isInvalid('petPhotoUrl')"
           [class.field-group--ok]="isValid('petPhotoUrl')">
           <label class="field-label" for="petPhotoUrl">
-            Foto de la mascota
-            <span class="required-dot">*</span>
+            Foto de la mascota <span class="required-dot">*</span>
           </label>
           <div class="field-input-wrap">
             <input id="petPhotoUrl" type="url" class="field-input" formControlName="petPhotoUrl"
@@ -151,24 +193,28 @@
             <span class="required-dot">*</span>
           </label>
           <div class="field-input-wrap">
-            <textarea id="petDescription" class="field-input field-input--textarea" formControlName="petDescription"
-              rows="4" [placeholder]="isAdoption
+            <textarea id="petDescription" class="field-input field-input--textarea"
+              formControlName="petDescription" rows="4"
+              [placeholder]="isAdoption
                 ? 'Cuéntanos sobre tu hogar, estilo de vida y por qué deseas adoptar...'
                 : 'Describe su color, raza, tamaño, señas particulares y lugar donde se perdió...'">
             </textarea>
             <span class="field-icon field-icon--ok field-icon--textarea">✓</span>
             <span class="field-icon field-icon--err field-icon--textarea">✕</span>
           </div>
-          <p class="field-error" *ngIf="isInvalid('petDescription')" role="alert"><span class="error-dot">●</span> {{
-            getError('petDescription') }}</p>
+          <p class="field-error" *ngIf="isInvalid('petDescription')" role="alert">
+            <span class="error-dot">●</span> {{ getError('petDescription') }}
+          </p>
           <p class="field-hint" *ngIf="!isInvalid('petDescription')">Mínimo 20 caracteres.</p>
         </div>
 
         <div class="field-group">
-          <label class="field-label" for="message">Mensaje adicional <span class="optional-tag">Opcional</span></label>
+          <label class="field-label" for="message">
+            Mensaje adicional <span class="optional-tag">Opcional</span>
+          </label>
           <div class="field-input-wrap">
-            <textarea id="message" class="field-input field-input--textarea" formControlName="message" rows="3"
-              placeholder="¿Algo más que quieras contarnos?"></textarea>
+            <textarea id="message" class="field-input field-input--textarea" formControlName="message"
+              rows="3" placeholder="¿Algo más que quieras contarnos?"></textarea>
           </div>
         </div>
 
@@ -176,17 +222,16 @@
           <p class="form-warning" *ngIf="submitted && adoptionForm.invalid" role="alert">
             <span class="warning-icon">⚠</span> Por favor revisa los campos marcados antes de enviar.
           </p>
-          <button type="submit" class="btn-submit" 
+          <button type="submit" class="btn-submit"
             [disabled]="isSubmitting"
-            [class.btn-submit--loading]="isSubmitting ||submitSuccess">
+            [class.btn-submit--loading]="isSubmitting || submitSuccess">
             <span class="btn-submit__text">
-              {{ isSubmitting ? 'Procesando...' : (isAdoption ? '🐾 Enviar solicitud de adopción' : '🔍 Reportar mascota
-              perdida') }}</span>
+              {{ isSubmitting ? 'Procesando...' : (isAdoption ? '🐾 Enviar solicitud de adopción' : '🔍 Reportar mascota perdida') }}
+            </span>
           </button>
         </div>
 
       </form>
     </div>
-
   </div>
 </section>

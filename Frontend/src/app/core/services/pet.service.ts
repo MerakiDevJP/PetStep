@@ -42,10 +42,10 @@ export class PetService {
    */
   public updatePetStatus(id: string, status: PetStatus): Observable<Pet> {
     return this.http.patch<Pet>(`${this.API_URL}/pets/${id}/status`, { estado: status }).pipe(tap((updatedPet) => {
-        this.petsSignal.update((currentPets) =>
-          currentPets.map((pet) => (pet.id === id ? { ...pet, estado: updatedPet.estado } : pet))
-        );
-      })
+      this.petsSignal.update((currentPets) =>
+        currentPets.map((pet) => (pet.id === id ? { ...pet, estado: updatedPet.estado } : pet))
+      );
+    })
     );
   }
   // =========================================================================
@@ -63,6 +63,9 @@ export class PetService {
    * 2. Enviar datos del Formulario de Solicitud de Adopción o Reporte de Extraviado
    */
   public enviarSolicitudAdopcion(solicitud: any): Observable<any> {
+    if (solicitud.tipoFormulario === 'lost') {
+      return this.http.post(`${this.API_URL}/lost-reports`, solicitud);
+    }
     return this.http.post(`${this.API_URL}/adoptions`, solicitud);
   }
 

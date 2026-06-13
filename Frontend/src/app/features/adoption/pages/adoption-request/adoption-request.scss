@@ -469,3 +469,22 @@
 app-pet-register {
   display: contents;
 }
+
+.btn-select-pet {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, #FF8C00, #FF6B00);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(255,107,0,0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(255,107,0,0.4);
+    color: #fff;
+  }
+}
