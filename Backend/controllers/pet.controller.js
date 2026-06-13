@@ -275,12 +275,46 @@ const deletePet = async (req, res) => {
     }
 };
 
+// 9. GET: Listar todas las solicitudes de adopción
+const getAdoptions = async (req, res) => {
+    try {
+        const solicitudes = await AdoptionRequest.find()
+            .populate('pet', 'name species fotoUrl status') // trae datos de la mascota
+            .sort({ createdAt: -1 });
+
+        res.status(200).json(solicitudes);
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error', message: error.message });
+    }
+};
+
+// 10. PATCH: Aprobar solicitud → mascota pasa a "Adoptado"
+const approveAdoption = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const solicitud = await AdoptionRequest.findById(id);
+
+        if (!solicitud) {
+            return res.status(404).json({ error: 'Not Found', message: 'Solicitud no encontrada.' });
+        }
+
+        // Cambiar estado de la mascota a Adoptado
+        await Pet.findByIdAndUpdate(solicitud.pet, { status: 'Adoptado' });
+
+        res.status(200).json({ message: '✅ Solicitud aprobada. Mascota marcada como Adoptada.' });
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error', message: error.message });
+    }
+};
+
 module.exports = {
     getPets,
     getPetById,
     createPet,
     createAdoption,
     createLostReport,
+    getAdoptions,
+    approveAdoption,
     addPetTracking,
     updatePetFull,
     updatePetStatus,
