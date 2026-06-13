@@ -9,6 +9,7 @@ function mapearEstado(status) {
         case 'En Proceso': return 'EN PROCESO';
         case 'Adoptado': return 'ADOPTADO';
         case 'Perdido': return 'PERDIDO';
+        case 'Recuperado': return 'RECUPERADO';
         default: return 'DISPONIBLE';
     }
 }
@@ -20,6 +21,7 @@ function mapearStatus(estado) {
         case 'EN_PROCESO': return 'En Proceso';
         case 'ADOPTADO': return 'Adoptado';
         case 'PERDIDO': return 'Perdido';
+        case 'RECUPERADO': return 'Recuperado';
         default: return 'Disponible';
     }
 }
@@ -27,8 +29,8 @@ function mapearStatus(estado) {
 // Helper: formatea un documento Pet al formato que espera el frontend
 function formatearMascota(p) {
     return {
-        _id: p._id,
-        id: p._id,
+        _id: p._id.toString(),      // ✅ convertir a string
+        id: p._id.toString(),       // ✅ convertir a string
         nombre: p.name,
         especie: p.species,
         edad: p.age?.toString(),
@@ -279,7 +281,7 @@ const deletePet = async (req, res) => {
 const getAdoptions = async (req, res) => {
     try {
         const solicitudes = await AdoptionRequest.find()
-            .populate('pet', 'name species fotoUrl status') // trae datos de la mascota
+            .populate('pet')
             .sort({ createdAt: -1 });
 
         res.status(200).json(solicitudes);
